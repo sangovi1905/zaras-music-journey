@@ -1,61 +1,496 @@
-import { useState } from "react";
-const AnimalBand = () => (<div style={{position:"fixed",bottom:0,right:0,width:320,height:200,pointerEvents:"none",opacity:.12,zIndex:0}}><svg viewBox="0 0 320 200" style={{width:"100%",height:"100%"}}><circle cx="60" cy="130" r="28" fill="#333"/><circle cx="60" cy="130" r="22" fill="#fff"/><circle cx="50" cy="124" r="6" fill="#333"/><circle cx="70" cy="124" r="6" fill="#333"/><circle cx="50" cy="124" r="2.5" fill="#fff"/><circle cx="70" cy="124" r="2.5" fill="#fff"/><ellipse cx="60" cy="134" rx="4" ry="3" fill="#333"/><rect x="35" y="160" width="50" height="12" rx="3" fill="#8b5cf6"/>{[0,1,2,3,4,5,6].map(i=><rect key={i} x={37+i*7} y="160" width="5" height="12" rx="1" fill={i%2===0?"#fff":"#333"} opacity=".8"/>)}<circle cx="160" cy="128" r="30" fill="#94a3b8"/><circle cx="160" cy="128" r="24" fill="#b0bec5"/><path d="M132,128 Q125,140 128,155" stroke="#94a3b8" fill="none" strokeWidth="6" strokeLinecap="round"/><circle cx="150" cy="122" r="3" fill="#333"/><circle cx="170" cy="122" r="3" fill="#333"/><circle cx="160" cy="165" r="16" fill="#f59e0b" stroke="#d97706" strokeWidth="2"/><line x1="150" y1="145" x2="145" y2="165" stroke="#92400e" strokeWidth="2.5" strokeLinecap="round"/><line x1="170" y1="145" x2="175" y2="165" stroke="#92400e" strokeWidth="2.5" strokeLinecap="round"/><ellipse cx="260" cy="135" rx="18" ry="22" fill="#fce7f3"/><ellipse cx="250" cy="98" rx="6" ry="20" fill="#fce7f3"/><ellipse cx="270" cy="98" rx="6" ry="20" fill="#fce7f3"/><ellipse cx="250" cy="100" rx="4" ry="16" fill="#fbcfe8"/><ellipse cx="270" cy="100" rx="4" ry="16" fill="#fbcfe8"/><circle cx="253" cy="128" r="2.5" fill="#333"/><circle cx="267" cy="128" r="2.5" fill="#333"/><ellipse cx="260" cy="137" rx="3" ry="2" fill="#e91e8c"/><line x1="260" y1="148" x2="260" y2="175" stroke="#94a3b8" strokeWidth="2"/><circle cx="260" cy="175" r="5" fill="#94a3b8"/><text x="100" y="80" fontSize="18" fill="#e91e8c" opacity=".6">♪</text><text x="200" y="60" fontSize="22" fill="#8b5cf6" opacity=".5">♫</text><text x="280" y="85" fontSize="16" fill="#60a5fa" opacity=".6">♪</text></svg></div>);
-const Sparkles = () => (<div style={{position:"fixed",top:0,left:0,right:0,bottom:0,pointerEvents:"none",zIndex:0,overflow:"hidden"}}>{[{x:10,y:15,s:14},{x:85,y:8,s:12},{x:45,y:90,s:10},{x:92,y:45,s:16},{x:5,y:70,s:11},{x:75,y:75,s:13}].map((sp,i)=><div key={i} style={{position:"absolute",left:`${sp.x}%`,top:`${sp.y}%`,fontSize:sp.s,opacity:.15,animation:`tw ${2+i*.3}s ease-in-out infinite alternate`}}>✨</div>)}<style>{`@keyframes tw{0%{opacity:.08;transform:scale(.8)}100%{opacity:.2;transform:scale(1.1)}}`}</style></div>);
-const PINK="#e91e8c",PURPLE="#8b5cf6",LBLUE="#60a5fa";
-const NAV=[{id:"home",icon:"🏠",label:"Home"},{id:"journey",icon:"🌳",label:"Journey"},{id:"week",icon:"🗓️",label:"Week"},{id:"calendar",icon:"📅",label:"Calendar"},{id:"chores",icon:"⭐",label:"Points"},{id:"travel",icon:"✈️",label:"Trip"},{id:"discover",icon:"🎥",label:"Watch"},{id:"setlist",icon:"🎶",label:"Songs"}];
-const INSTRUMENTS=[
-{id:"piano",name:"Piano & Keyboard",emoji:"🎹",color:"#8b5cf6",classes:[{teacher:"Bernard (PNC)",day:"Mon",time:"4:30-5",type:"In person"},{teacher:"Spardha Online",day:"Sat",time:"10-11",type:"Online ✨NEW"}],practice:"Alfred's Lesson Book 1A. This week: C Position pieces. Swipe through pages below!",tips:["📖 Alfred's 1A, pages 1-8 in 15 min","🎯 C position 5 min","🎵 Play Merrily We Roll Along 3x"],pages:[{title:"Page 1: Meet the Piano!",content:"🎹 The piano has WHITE keys and BLACK keys.\n\nBlack keys come in groups of 2 and 3.\nFind a group of 2 black keys. The white key just to the LEFT is C!\n\n👆 Find ALL the C keys on your keyboard!"},{title:"Page 2: Finger Numbers",content:"Each finger has a number:\n\n👍 Thumb = 1\n☝️ Pointer = 2\n🖕 Middle = 3\n💍 Ring = 4\n🤙 Pinky = 5\n\nBoth hands use the same numbers!\nRight hand: Thumb (1) on LEFT\nLeft hand: Thumb (1) on RIGHT"},{title:"Page 3: C Position",content:"Put your RIGHT hand on the piano:\n\n👆 Finger 1 (thumb) on C\n👆 Finger 2 on D\n👆 Finger 3 on E\n👆 Finger 4 on F\n👆 Finger 5 on G\n\nThis is C POSITION! 🎹\nPlay: C-D-E-F-G then G-F-E-D-C"},{title:"Page 4: Quarter Notes ♩",content:"A Quarter Note ♩ gets ONE beat.\n\nClap: ♩ ♩ ♩ ♩  (1 2 3 4)\n\nPlay on C: C C C C\nTry on D: D D D D\nTry on E: E E E E"},{title:"Page 5: Half Notes",content:"A Half Note gets TWO beats.\n\nClap: (hold)(hold) (hold)(hold)\n       1-2         3-4\n\nPlay: C(hold) E(hold)\nMix: ♩ ♩ half-note\n     C  D  E---"},{title:"Page 6: Ode to Joy 🎵",content:"By Beethoven! Right Hand, C Position:\n\nE E F G | G F E D\nC C D E | E - D D\nE E F G | G F E D\nC C D E | D - C C\n\n🌟 Practice line by line!"},{title:"Page 7: Merrily We Roll Along",content:"🎵 Right Hand, C Position:\n\nE D C D | E E E -\nD D D - | E G G -\nE D C D | E E E E\nD D E D | C - - -\n\n🎯 Start SLOW then speed up!"},{title:"Page 8: Left Hand",content:"LEFT hand C Position: 🤚\n\n🤙 Finger 5 (pinky) on C\n💍 Finger 4 on D\n🖕 Finger 3 on E\n☝️ Finger 2 on F\n👍 Finger 1 (thumb) on G\n\nPlay: C-D-E-F-G going UP\nThen: G-F-E-D-C going DOWN"}],chapters:["Keyboard orientation","Finger numbers","C Position","Quarter & half notes","Ode to Joy","Merrily We Roll Along","Left Hand","Both hands","Treble clef","Bass clef"]},
-{id:"drums",name:"Drums",emoji:"🥁",color:"#f59e0b",classes:[{teacher:"Online",day:"Tue",time:"7-8",type:"Online"}],practice:"Rudiments 10-20 at metronome 55 BPM. Then Konnakol: Ta Ka Di Mi.",tips:["🥁 Rudiments at 55 BPM, 5 min","🗣️ Konnakol out loud, 5 min","👏 Clap tala 5 min"],pages:[{title:"Single Stroke Roll",content:"R L R L R L R L\n\nAlternate right and left evenly.\n🎯 Start at 55 BPM\n⬆️ Increase 5 BPM when comfortable"},{title:"Double Stroke Roll",content:"RR LL RR LL RR LL\n\nTwo hits per hand before switching.\n🎯 Start SLOW — accuracy first!\nLet the stick bounce for the 2nd hit."},{title:"Paradiddle",content:"R L R R  L R L L\n\n🧠 Para-diddle:\nPa-ra = alternating (R-L)\nDid-dle = double (R-R)\n\nThe MOST IMPORTANT rudiment!"},{title:"Konnakol: Ta Ka Di Mi",content:"🗣️ Ta Ka Di Mi = 4 syllables per beat\n\nAdi Tala (8 beats):\n👏 Clap | 🤙 pinky | 💍 ring | 🖕 middle\n👏 Clap | 🤙 pinky | 💍 ring | 🖕 middle\n\nSay Ta-Ka-Di-Mi on EACH beat!"}],chapters:["Single stroke roll","Double stroke roll","Paradiddle","Flam & drag","Konnakol: Ta Ka Di Mi","Konnakol: Ta Ki Ta","Konnakol in Adi tala"]},
-{id:"western_vocal",name:"Western Vocal",emoji:"🎤",color:PINK,classes:[{teacher:"Ritika (Spardha)",day:"Fri",time:"5-6",type:"Online"}],practice:"'That's What Makes You Beautiful' — verse & chorus.",tips:["🫁 Lip trills 2 min","🎤 Verse 3x, chorus 3x","📱 Record yourself!"],pages:[{title:"Warm-Up: Lip Trills",content:"🫁 BRRRRRRR!\n\nClose lips loosely and blow air.\nLips vibrate like a motorboat.\n\nGo UP: Brrrr ⬆️\nGo DOWN: Brrrr ⬇️\n\n2 minutes before singing!"},{title:"Verse",content:"🎵 You're insecure, don't know what for\nYou're turning heads when you walk\nthrough the do-o-or\n\n🎯 Breathe at the comma\n🎯 Hold the 'o' in do-o-or\n🎯 Keep it light and happy!\n\nSing 3 times. Record the 3rd."},{title:"Chorus",content:"🎵 Baby you light up my world\nlike nobody else\nThe way that you flip your hair\ngets me overwhelmed\n\n🎵 You don't know-oh-oh\nYou don't know you're beautiful!\n\n🎯 LOUDER and more EXCITED!\nProject on BEAUTIFUL!\nDance while you sing! 💃"}],chapters:["Breathing & warm-ups","TWMYB — verse","Pre-chorus","Chorus","Full song","Expression","Performance-ready"]},
-{id:"guitar",name:"Guitar",emoji:"🎸",color:"#3b82f6",classes:[{teacher:"Rishabh Rane",day:"Fri",time:"6:30-7:30",type:"Online ✨NEW"}],practice:"Trinity Grade 1. Em & Am chords. Transitions 1 min per pair.",tips:["🎸 Em→Am 1 min","✋ FINGERTIPS not pads","🎵 Down strokes only"],pages:[{title:"E Minor (Em)",content:"🎸 Your FIRST chord!\n\nFinger 2 → 5th string, 2nd fret\nFinger 3 → 4th string, 2nd fret\n\nStrum ALL 6 strings: ↓\n\nSounds sad and pretty 🌙\n\n🎯 Strum, lift, place again. 10x!"},{title:"A Minor (Am)",content:"🎸 Chord #2!\n\nFinger 1 → 2nd string, 1st fret\nFinger 2 → 4th string, 2nd fret\nFinger 3 → 3rd string, 2nd fret\n\nStrum strings 5-1 (skip 6th)\n\n🎯 Em → Am → Em → Am\nSwitch every 4 beats!"}],chapters:["E minor","A minor","G major","C major","Transitions","Strumming","Trinity piece"]},
-{id:"perf_vocal",name:"Performance Vocal",emoji:"🌟",color:"#ef4444",classes:[{teacher:"School of Rock",day:"Sat",time:"10-10:30",type:"In person"}],practice:"Rockschool Grade 1. Review Lean on Me. Chapter 12 exercises.",tips:["🎤 Lean on Me chorus warmup","📝 Ch 12 exercises","🌟 Open Mic prep"],pages:[{title:"Rockschool Journey",content:"✅ Ch 1: Introduction\n✅ Ch 2: We Will Rock You\n⬜ Ch 3: Don't Stop the Music\n⬜ Ch 4: A Million Dreams\n⬜ Ch 5: I Love You\n⬜ Ch 6: Stand by Me\n✅ Ch 10: Lean on Me\n🔄 Ch 12: Technical Exercises\n⬜ Graded Exam\n⬜ Open Mic! 🎤"}],chapters:["We Will Rock You ✅","Don't Stop the Music","A Million Dreams","I Love You","Stand by Me","Lean on Me ✅","Technical Exercises 🔄","Graded Exam","Open Mic 🎤"]},
-{id:"carnatic",name:"Carnatic Vocals",emoji:"🕉️",color:"#f97316",classes:[{teacher:"Raaga School",day:"Sat",time:"1-2",type:"In person"}],practice:"Sa Pa Sa, full arohanam, varisai patterns.",tips:["🕉️ Tanpura app 5 min","🎵 Arohanam 5x slowly","👏 Tala: clap-pinky-ring-middle"],pages:[{title:"Sa Pa Sa",content:"🕉️ The Foundation\n\nSa = home note (like C)\nPa = 5th note\n\nSing: Sa ——— Pa ——— Sa ———\n\n🎯 Hold each 4 beats\n🎵 Use Tanpura app\nDo 10 times!"},{title:"Full Arohanam",content:"🎵 Going UP:\n\nSa Ri Ga Ma Pa Da Ni Sa\n\n(Like Do Re Mi Fa Sol La Ti Do!)\n\n🎯 Sing each swara clearly\n👏 Keep tala with hand\n\n🔄 Then DOWN:\nSa Ni Da Pa Ma Ga Ri Sa"},{title:"Varisai Pattern 1",content:"🎵 Sa Ri Sa Ri Sa Ri Ga Ma\nSa Ri Ga Ma Pa Da Ni Sa\n\n🎯 Builds gradually:\nStart: Sa Ri, Sa Ri (repeat)\nExpand: Sa Ri Ga Ma\nFull: Sa Ri Ga Ma Pa Da Ni Sa\n\n👏 Keep Adi tala!"}],chapters:["Sa Pa Sa","Full Arohanam","Avarohanam","Varisai 1","Full scale","Sarali Varisai","First raga"]}
+import { useState, useEffect, useRef } from "react";
+
+/* ═══════════════════════════════════════════
+   ✨ ZARA'S WORLD — The Ultimate Kid App ✨
+   Built with love by Mom 🐼
+   ═══════════════════════════════════════════ */
+
+// ── FLOATING MUSIC NOTES ──
+const FloatingNotes = () => {
+  const notes = ["♪","♫","♬","♩","🎵","🎶","✨","⭐","💫"];
+  return <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0,overflow:"hidden"}}>
+    {Array.from({length:18},(_,i)=>{
+      const n=notes[i%notes.length], x=5+Math.random()*90, dur=12+Math.random()*20, del=Math.random()*15, sz=10+Math.random()*16;
+      return <div key={i} style={{position:"absolute",left:`${x}%`,bottom:-30,fontSize:sz,opacity:.12,animation:`floatUp ${dur}s ${del}s linear infinite`}}>{n}</div>
+    })}
+    <style>{`@keyframes floatUp{0%{transform:translateY(0) rotate(0);opacity:.12}50%{opacity:.18}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}`}</style>
+  </div>;
+};
+
+// ── ANIMATED ANIMAL BAND (SVG) ──
+const AnimalParty = () => (
+  <div style={{position:"fixed",bottom:0,left:80,right:0,height:280,pointerEvents:"none",zIndex:3,opacity:.45}}>
+    <svg viewBox="0 0 800 220" style={{width:"100%",height:"100%"}} preserveAspectRatio="xMidYMax meet">
+      {/* Stage / ground */}
+      <ellipse cx="400" cy="215" rx="380" ry="18" fill="#e9d5ff" opacity=".5"/>
+      
+      {/* 🐼 PANDA on KEYBOARD — left */}
+      <g transform="translate(80,60)">
+        <circle cx="0" cy="0" r="32" fill="#1a1a2e"/><circle cx="0" cy="0" r="26" fill="#fff"/>
+        <ellipse cx="-16" cy="-20" rx="10" ry="12" fill="#1a1a2e"/>
+        <ellipse cx="16" cy="-20" rx="10" ry="12" fill="#1a1a2e"/>
+        <circle cx="-8" cy="-4" r="5.5" fill="#1a1a2e"/><circle cx="8" cy="-4" r="5.5" fill="#1a1a2e"/>
+        <circle cx="-6" cy="-5" r="2" fill="#fff"/><circle cx="10" cy="-5" r="2" fill="#fff"/>
+        <ellipse cx="0" cy="6" rx="5" ry="3.5" fill="#1a1a2e"/>
+        <ellipse cx="-4" cy="12" rx="2" ry="1" fill="#fca5a5"/>
+        <ellipse cx="4" cy="12" rx="2" ry="1" fill="#fca5a5"/>
+        {/* keyboard */}
+        <rect x="-32" y="38" width="64" height="18" rx="4" fill="#7c3aed" opacity=".9"/>
+        {[0,1,2,3,4,5,6,7].map(i=><rect key={i} x={-30+i*8} y="40" width="6" height="14" rx="1.5" fill={i%2===0?"#fff":"#1a1a2e"} opacity=".85"/>)}
+        {/* bouncing animation */}
+        <animateTransform attributeName="transform" type="translate" values="80,60;80,56;80,60" dur="1.2s" repeatCount="indefinite" additive="replace"/>
+      </g>
+
+      {/* 🐘 ELEPHANT on DRUMS — center-left */}
+      <g transform="translate(260,55)">
+        <ellipse cx="0" cy="5" rx="36" ry="32" fill="#94a3b8"/><ellipse cx="0" cy="5" rx="30" ry="26" fill="#b8c4d0"/>
+        <ellipse cx="-28" cy="-8" rx="14" ry="18" fill="#94a3b8"/><ellipse cx="28" cy="-8" rx="14" ry="18" fill="#94a3b8"/>
+        <ellipse cx="-28" cy="-8" rx="10" ry="14" fill="#cbd5e1"/><ellipse cx="28" cy="-8" rx="10" ry="14" fill="#cbd5e1"/>
+        <path d="M-8,16 Q-12,35 -6,50" stroke="#94a3b8" fill="none" strokeWidth="8" strokeLinecap="round"/>
+        <circle cx="-10" cy="-2" r="4" fill="#1a1a2e"/><circle cx="10" cy="-2" r="4" fill="#1a1a2e"/>
+        <circle cx="-8" cy="-3" r="1.5" fill="#fff"/><circle cx="12" cy="-3" r="1.5" fill="#fff"/>
+        {/* drums */}
+        <ellipse cx="0" cy="50" rx="24" ry="8" fill="#f59e0b"/><rect x="-24" y="42" width="48" height="8" fill="#f59e0b"/>
+        <ellipse cx="0" cy="42" rx="24" ry="8" fill="#fbbf24"/>
+        <line x1="-18" y1="25" x2="-24" y2="42" stroke="#92400e" strokeWidth="3" strokeLinecap="round"/>
+        <line x1="18" y1="25" x2="24" y2="42" stroke="#92400e" strokeWidth="3" strokeLinecap="round"/>
+        <animateTransform attributeName="transform" type="translate" values="260,55;260,52;260,55;260,53;260,55" dur="0.8s" repeatCount="indefinite" additive="replace"/>
+      </g>
+
+      {/* 🐰 BUNNY SINGING — center */}
+      <g transform="translate(440,50)">
+        <ellipse cx="0" cy="12" rx="22" ry="28" fill="#fce7f3"/>
+        <ellipse cx="-12" cy="-30" rx="7" ry="24" fill="#fce7f3"/><ellipse cx="12" cy="-30" rx="7" ry="24" fill="#fce7f3"/>
+        <ellipse cx="-12" cy="-28" rx="5" ry="20" fill="#fbcfe8"/><ellipse cx="12" cy="-28" rx="5" ry="20" fill="#fbcfe8"/>
+        <circle cx="-7" cy="4" r="3.5" fill="#1a1a2e"/><circle cx="7" cy="4" r="3.5" fill="#1a1a2e"/>
+        <circle cx="-5.5" cy="3" r="1.2" fill="#fff"/><circle cx="8.5" cy="3" r="1.2" fill="#fff"/>
+        <path d="M-3,12 Q0,16 3,12" fill="#e91e8c"/>
+        <circle cx="-14" cy="10" rx="5" ry="4" fill="#fca5a5" opacity=".4"/>
+        <circle cx="14" cy="10" rx="5" ry="4" fill="#fca5a5" opacity=".4"/>
+        {/* microphone */}
+        <line x1="0" y1="28" x2="0" y2="58" stroke="#64748b" strokeWidth="2.5"/>
+        <circle cx="0" cy="28" r="6" fill="#475569"/>
+        <circle cx="0" cy="28" r="4.5" fill="#64748b"/>
+        {/* mouth open singing */}
+        <animateTransform attributeName="transform" type="translate" values="440,50;440,46;440,50" dur="1.5s" repeatCount="indefinite" additive="replace"/>
+      </g>
+
+      {/* 🎸 FROG on GUITAR — center-right */}
+      <g transform="translate(600,65)">
+        <ellipse cx="0" cy="5" rx="24" ry="22" fill="#22c55e"/><ellipse cx="0" cy="5" rx="20" ry="18" fill="#4ade80"/>
+        <circle cx="-10" cy="-6" r="8" fill="#22c55e"/><circle cx="10" cy="-6" r="8" fill="#22c55e"/>
+        <circle cx="-10" cy="-8" r="5" fill="#fff"/><circle cx="10" cy="-8" r="5" fill="#fff"/>
+        <circle cx="-10" cy="-8" r="2.5" fill="#1a1a2e"/><circle cx="10" cy="-8" r="2.5" fill="#1a1a2e"/>
+        <path d="M-6,10 Q0,15 6,10" stroke="#166534" fill="none" strokeWidth="1.5"/>
+        {/* guitar body */}
+        <ellipse cx="-20" cy="30" rx="12" ry="16" fill="#92400e"/><ellipse cx="-20" cy="28" rx="10" ry="14" fill="#b45309"/>
+        <line x1="-20" y1="14" x2="-20" y2="-10" stroke="#92400e" strokeWidth="2.5"/>
+        <circle cx="-20" cy="28" r="3" fill="#1a1a2e"/>
+        <animateTransform attributeName="transform" type="translate" values="600,65;600,62;600,65;600,63;600,65" dur="1s" repeatCount="indefinite" additive="replace"/>
+      </g>
+
+      {/* 🦊 FOX on TAMBOURINE — far right */}
+      <g transform="translate(730,70)">
+        <ellipse cx="0" cy="5" rx="20" ry="18" fill="#f97316"/><ellipse cx="0" cy="5" rx="16" ry="14" fill="#fdba74"/>
+        <polygon points="-14,-12 -20,-30 -6,-18" fill="#f97316"/>
+        <polygon points="14,-12 20,-30 6,-18" fill="#f97316"/>
+        <polygon points="-10,-14 -14,-26 -4,-18" fill="#fdba74"/>
+        <polygon points="10,-14 14,-26 4,-18" fill="#fdba74"/>
+        <circle cx="-5" cy="0" r="2.5" fill="#1a1a2e"/><circle cx="5" cy="0" r="2.5" fill="#1a1a2e"/>
+        <ellipse cx="0" cy="7" rx="3" ry="2" fill="#1a1a2e"/>
+        {/* tambourine */}
+        <circle cx="18" cy="20" r="10" fill="#fbbf24" stroke="#f59e0b" strokeWidth="2"/>
+        <circle cx="24" cy="14" r="2.5" fill="#fff" opacity=".6"/><circle cx="24" cy="26" r="2.5" fill="#fff" opacity=".6"/>
+        <animateTransform attributeName="transform" type="translate" values="730,70;730,66;730,70" dur="0.7s" repeatCount="indefinite" additive="replace"/>
+      </g>
+
+      {/* Floating notes above animals */}
+      <text x="130" y="30" fontSize="18" fill="#e91e8c" opacity=".5"><animate attributeName="y" values="30;10;30" dur="3s" repeatCount="indefinite"/>♪</text>
+      <text x="350" y="20" fontSize="22" fill="#8b5cf6" opacity=".4"><animate attributeName="y" values="20;5;20" dur="4s" repeatCount="indefinite"/>♫</text>
+      <text x="500" y="15" fontSize="16" fill="#f59e0b" opacity=".5"><animate attributeName="y" values="15;0;15" dur="2.5s" repeatCount="indefinite"/>♬</text>
+      <text x="680" y="35" fontSize="14" fill="#3b82f6" opacity=".5"><animate attributeName="y" values="35;20;35" dur="3.5s" repeatCount="indefinite"/>♪</text>
+    </svg>
+  </div>
+);
+
+// ── SPARKLE OVERLAY ──
+const Sparkles = () => (
+  <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:0,overflow:"hidden"}}>
+    {[{x:8,y:12,s:16,d:2},{x:88,y:6,s:14,d:2.5},{x:42,y:88,s:12,d:3},{x:94,y:42,s:18,d:1.8},{x:3,y:65,s:13,d:2.2},{x:72,y:72,s:15,d:2.8},{x:25,y:3,s:11,d:3.2},{x:58,y:48,s:13,d:2.6},{x:15,y:40,s:10,d:3.5},{x:80,y:25,s:12,d:2.1}].map((s,i)=>
+      <div key={i} style={{position:"absolute",left:`${s.x}%`,top:`${s.y}%`,fontSize:s.s,opacity:.13,animation:`sparkle ${s.d}s ease-in-out infinite alternate`,animationDelay:`${i*.3}s`}}>✨</div>
+    )}
+    <style>{`@keyframes sparkle{0%{opacity:.06;transform:scale(.7) rotate(0deg)}100%{opacity:.2;transform:scale(1.2) rotate(20deg)}}`}</style>
+  </div>
+);
+
+// ── CONFETTI BURST ──
+const Confetti = ({show}) => {
+  if(!show) return null;
+  return <div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,overflow:"hidden"}}>
+    {Array.from({length:80},(_,i)=>{
+      const colors=["#e91e8c","#f59e0b","#60a5fa","#8b5cf6","#22c55e","#f472b6","#f97316","#fbbf24","#a78bfa"];
+      return <div key={i} style={{position:"absolute",left:`${Math.random()*100}%`,top:-10,width:6+Math.random()*12,height:6+Math.random()*12,background:colors[i%colors.length],borderRadius:Math.random()>.4?"50%":"2px",animation:`confettiFall ${1.5+Math.random()*2}s ${Math.random()*.5}s ease-in forwards`}}/>
+    })}
+    <style>{`@keyframes confettiFall{0%{transform:translateY(0) rotate(0) scale(1);opacity:1}100%{transform:translateY(100vh) rotate(1080deg) scale(.3);opacity:0}}`}</style>
+  </div>;
+};
+
+// ── STAGE MODE ──
+const StageMode = ({onClose}) => (
+  <div onClick={onClose} style={{position:"fixed",inset:0,background:"radial-gradient(ellipse at 50% 120%,#4c1d95 0%,#1e1b4b 40%,#0f0a1e 70%)",zIndex:9998,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
+    {/* Spotlights */}
+    {[...Array(16)].map((_,i)=><div key={i} style={{position:"absolute",bottom:"40%",left:`${3+i*6.2}%`,width:4,height:"60%",background:`linear-gradient(to top,${["#e91e8c","#f59e0b","#60a5fa","#8b5cf6","#22c55e","#f472b6"][i%6]}55,transparent)`,transform:`rotate(${-35+i*4.6}deg)`,transformOrigin:"bottom",animation:`spotlight ${2+i*.15}s ease-in-out infinite alternate`}}/>)}
+    {/* Stars */}
+    {[...Array(30)].map((_,i)=><div key={"s"+i} style={{position:"absolute",left:`${Math.random()*100}%`,top:`${Math.random()*60}%`,fontSize:4+Math.random()*8,color:"#fff",opacity:.3+Math.random()*.4,animation:`twinkStar ${1+Math.random()*2}s ease-in-out infinite alternate`}}>⭐</div>)}
+    <div style={{fontSize:100,animation:"stagePulse 1s ease-in-out infinite",filter:"drop-shadow(0 0 30px #e91e8c)"}}>🎤</div>
+    <div style={{fontSize:42,fontWeight:900,background:"linear-gradient(135deg,#f9a8d4,#c084fc,#93c5fd)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",marginTop:16,textShadow:"none",fontFamily:"'Fredoka','Comic Neue',cursive,sans-serif"}}>SUPERSTAR ZARA!</div>
+    <div style={{display:"flex",gap:12,marginTop:24}}>
+      {["🐼","🎹","🥁","🎸","🎤","🐰","🐘","🎵","🦊","💃"].map((e,i)=><span key={i} style={{fontSize:32,animation:`animalBounce ${.8+i*.1}s ease-in-out infinite alternate`,animationDelay:`${i*.08}s`}}>{e}</span>)}
+    </div>
+    <div style={{color:"#c084fc",fontSize:14,marginTop:48,fontFamily:"'Fredoka','Comic Neue',cursive,sans-serif"}}>✨ 7-day streak! You're a STAR! ✨</div>
+    <div style={{color:"#4c1d9566",fontSize:11,marginTop:24}}>tap anywhere to close</div>
+    <style>{`
+      @keyframes stagePulse{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.12) rotate(3deg)}}
+      @keyframes spotlight{0%{opacity:.15}100%{opacity:.4}}
+      @keyframes twinkStar{0%{opacity:.1;transform:scale(.6)}100%{opacity:.6;transform:scale(1.1)}}
+      @keyframes animalBounce{0%{transform:translateY(0)}100%{transform:translateY(-18px)}}
+    `}</style>
+  </div>
+);
+
+// ═══ CONSTANTS ═══
+const PINK="#e91e8c",PURP="#8b5cf6",LBLU="#60a5fa";
+const NAV=[{id:"home",icon:"🏠",l:"Home"},{id:"journey",icon:"🌳",l:"Journey"},{id:"week",icon:"🗓️",l:"Week"},{id:"calendar",icon:"📅",l:"Calendar"},{id:"chores",icon:"⭐",l:"Points"},{id:"travel",icon:"✈️",l:"Trip"},{id:"discover",icon:"🎥",l:"Watch"},{id:"setlist",icon:"🎶",l:"Songs"}];
+
+const INST=[
+{id:"piano",name:"Piano & Keyboard",emoji:"🎹",color:"#8b5cf6",cls:[{t:"Bernard · PNC",d:"Mon 4:30-5"},{t:"Spardha Online",d:"Sat 10-11 ✨"}],practice:"Alfred's Lesson Book 1A — C Position pieces. Swipe through!",tips:["📖 Pages 1-8, 15 min","🎯 C position 5 min","🎵 Merrily We Roll Along 3x"],pages:[
+  {t:"🎹 Meet the Piano!",c:"The piano has WHITE and BLACK keys.\n\nBlack keys come in groups of 2️⃣ and 3️⃣.\n\nFind 2 black keys → the white key\njust LEFT of them is C!\n\n👆 Find ALL the C keys!"},
+  {t:"✋ Finger Numbers",c:"👍 Thumb = 1\n☝️ Pointer = 2\n🖕 Middle = 3\n💍 Ring = 4\n🤙 Pinky = 5\n\n✋ Right hand: thumb on LEFT\n🤚 Left hand: thumb on RIGHT"},
+  {t:"🎯 C Position",c:"RIGHT hand on piano:\n\nThumb (1) → C\nFinger 2 → D\nFinger 3 → E\nFinger 4 → F\nFinger 5 → G\n\n🎹 Play: C-D-E-F-G\nThen back: G-F-E-D-C"},
+  {t:"♩ Quarter & Half Notes",c:"Quarter Note ♩ = ONE beat\nHalf Note = TWO beats\n\n♩ ♩ ♩ ♩ = C C C C\n1  2  3  4\n\nHalf Half = C--- E---\n1-2  3-4\n\nMix: ♩ ♩ Half\n     C  D  E---"},
+  {t:"🎵 Ode to Joy!",c:"By Beethoven! C Position:\n\nE E F G | G F E D\nC C D E | E - D D\n\nE E F G | G F E D\nC C D E | D - C C\n\n🌟 One line at a time!"},
+  {t:"🎵 Merrily We Roll Along",c:"C Position, Right Hand:\n\nE D C D | E E E -\nD D D - | E G G -\nE D C D | E E E E\nD D E D | C - - -\n\n🎯 Slow first, then faster!"},
+  {t:"🤚 Left Hand Time!",c:"Left Hand C Position:\n\n🤙 Pinky (5) → C\n💍 Ring (4) → D\n🖕 Middle (3) → E\n☝️ Pointer (2) → F\n👍 Thumb (1) → G\n\nPlay UP: C-D-E-F-G\nPlay DOWN: G-F-E-D-C"},
+  {t:"🎹 Both Hands!",c:"Now the BIG challenge!\n\nRight hand plays the melody.\nLeft hand plays C and G.\n\nTry Ode to Joy:\nRight: E E F G...\nLeft: C--- G--- (hold long)\n\n🌟 Slow & steady wins!"}
+],ch:["Keyboard layout","Finger numbers","C Position","Notes & rhythm","Ode to Joy","Merrily We Roll Along","Left Hand","Both hands","Treble clef","Bass clef"]},
+
+{id:"drums",name:"Drums",emoji:"🥁",color:"#f59e0b",cls:[{t:"Online Teacher",d:"Tue 7-8"}],practice:"Rudiments 10-20 at 55 BPM. Konnakol: Ta Ka Di Mi.",tips:["🥁 Rudiments at 55 BPM","🗣️ Konnakol OUT LOUD","👏 Clap tala pattern"],pages:[
+  {t:"🥁 Single Stroke Roll",c:"R L R L R L R L\n\nAlternate hands evenly.\n\n🎯 Set metronome to 55 BPM\n🎯 Play each note exactly on the beat\n⬆️ Add 5 BPM when it feels easy"},
+  {t:"🥁 Double Stroke Roll",c:"RR LL RR LL\n\nTwo hits per hand.\n\n🎯 Let the stick BOUNCE\nfor the second hit.\n\nCount: 1-and-2-and-3-and-4-and"},
+  {t:"🥁 Paradiddle!",c:"R L R R  L R L L\n\n🧠 Think: 'Pa-ra-did-dle'\nPa-ra = alternating\nDid-dle = double\n\n🔥 The MOST IMPORTANT rudiment!"},
+  {t:"🗣️ Konnakol",c:"South Indian rhythm!\n\n🗣️ Ta Ka Di Mi = 4 syllables\n\nAdi Tala (8 beats):\n👏 clap | 🤙 pinky | 💍 ring | 🖕 middle\n👏 clap | 🤙 pinky | 💍 ring | 🖕 middle\n\nSay Ta-Ka-Di-Mi on EACH beat!"}
+],ch:["Single stroke","Double stroke","Paradiddle","Flam & drag","Ta Ka Di Mi","Ta Ki Ta","Adi tala"]},
+
+{id:"western_vocal",name:"Western Vocal",emoji:"🎤",color:PINK,cls:[{t:"Ritika · Spardha",d:"Fri 5-6"}],practice:"That's What Makes You Beautiful — verse & chorus!",tips:["🫁 Lip trills 2 min","🎤 Verse 3x, chorus 3x","📱 Record yourself!"],pages:[
+  {t:"🫁 Warm-Up!",c:"BRRRRRRR! 🫁\n\nClose lips, blow air gently.\nYour lips vibrate!\n\nGo UP the scale: Brrrr ⬆️\nGo DOWN: Brrrr ⬇️\n\nDo this 2 min before singing!"},
+  {t:"🎤 Verse",c:"🎵 You're insecure,\ndon't know what for...\nYou're turning heads\nwhen you walk through the do-o-or\n\n🎯 Breathe at the comma\n🎯 Hold the 'o' in do-o-or\n\nSing 3x. Record the 3rd!"},
+  {t:"🎤 Chorus!",c:"🎵 Baby you light up my world\nlike nobody else!\n\nYou don't know-oh-oh,\nyou don't know you're beautiful!\n\n🎯 This part is LOUD & EXCITED!\n🎯 Project on 'BEAUTIFUL!'\n💃 Dance while you sing!"}
+],ch:["Warm-ups","TWMYB verse","Pre-chorus","Chorus","Full song","Dynamics","Performance"]},
+
+{id:"guitar",name:"Guitar",emoji:"🎸",color:"#3b82f6",cls:[{t:"Rishabh Rane",d:"Fri 6:30-7:30 ✨"}],practice:"Trinity Grade 1. Em & Am chord transitions.",tips:["🎸 Em→Am 1 min","✋ Use FINGERTIPS","🎵 Down strokes"],pages:[
+  {t:"🎸 E Minor (Em)",c:"Your FIRST chord! 🎉\n\nFinger 2 → 5th string, 2nd fret\nFinger 3 → 4th string, 2nd fret\n\nStrum ALL 6 strings: ↓↓↓↓\n\nSounds moody and pretty 🌙\n\n🎯 Strum, lift, place. 10 times!"},
+  {t:"🎸 A Minor (Am)",c:"Chord #2! 🎉\n\nFinger 1 → 2nd string, 1st fret\nFinger 2 → 4th string, 2nd fret\nFinger 3 → 3rd string, 2nd fret\n\n🎯 Em → Am → Em → Am\nSwitch every 4 strums!"}
+],ch:["E minor","A minor","G major","C major","Transitions","Strumming","Trinity piece"]},
+
+{id:"perf_vocal",name:"Rockschool Vocal",emoji:"🌟",color:"#ef4444",cls:[{t:"School of Rock",d:"Sat 10-10:30"}],practice:"Rockschool Grade 1. Chapter 12: Technical Exercises.",tips:["🎤 Lean on Me warmup","📝 Ch 12 exercises","🌟 Open Mic prep!"],pages:[
+  {t:"🌟 Your Rockschool Map",c:"✅ Ch 1: Introduction\n✅ Ch 2: We Will Rock You\n⬜ Ch 3: Don't Stop the Music\n⬜ Ch 4: A Million Dreams\n⬜ Ch 5: I Love You\n⬜ Ch 6: Stand by Me\n✅ Ch 10: Lean on Me\n🔄 Ch 12: Technical Exercises\n⬜ 💰 Graded Exam\n⬜ 🎤 OPEN MIC!"}
+],ch:["We Will Rock You ✅","Don't Stop Music","A Million Dreams","I Love You","Stand by Me","Lean on Me ✅","Tech Exercises 🔄","Graded Exam","Open Mic 🎤"]},
+
+{id:"carnatic",name:"Carnatic Vocals",emoji:"🕉️",color:"#f97316",cls:[{t:"Raaga School",d:"Sat 1-2"}],practice:"Sa Pa Sa → full arohanam → varisai patterns.",tips:["🕉️ Tanpura app 5 min","🎵 Arohanam 5x slow","👏 Tala: clap-pinky-ring-mid"],pages:[
+  {t:"🕉️ Sa Pa Sa",c:"The Foundation!\n\nSa = home note\nPa = 5th note\n\nSing: Sa ——— Pa ——— Sa\n\n🎯 Hold each 4 beats\n🎵 Use Tanpura app for drone\n\nDo 10 times!"},
+  {t:"🎵 Arohanam",c:"Going UP the scale:\n\nSa Ri Ga Ma Pa Da Ni Sa\n\n= Do Re Mi Fa Sol La Ti Do!\n\n🎯 Clear swaras\n👏 Keep tala with hand\n\n🔄 DOWN:\nSa Ni Da Pa Ma Ga Ri Sa"},
+  {t:"🎵 Varisai 1",c:"Sa Ri  Sa Ri  Sa Ri  Ga Ma\nSa Ri  Ga Ma  Pa Da  Ni Sa\n\n🎯 Builds step by step:\n1. Sa Ri, Sa Ri (repeat)\n2. Add: Sa Ri Ga Ma\n3. Full: ...Pa Da Ni Sa\n\n👏 Keep Adi tala!"}
+],ch:["Sa Pa Sa","Arohanam","Avarohanam","Varisai 1","Full scale","Sarali Varisai","First raga"]}
 ];
-const OTHER=[{name:"Musical Theatre",emoji:"🎭",color:"#ec4899",info:"Mon 6-7:30 & Thu 5-6 · Lighthouse · Peter Pan Jr!"},{name:"Tennis",emoji:"🎾",color:"#22c55e",info:"Tue 5-6 · Bob McGuire Park"},{name:"Hip Hop Dance",emoji:"💃",color:"#f472b6",info:"Sat 11-12 ✨NEW"},{name:"Public Speaking",emoji:"🎙️",color:"#0ea5e9",info:"Sat 3-4 ✨NEW"},{name:"Art",emoji:"🎨",color:"#14b8a6",info:"Sun 9-10:30"}];
-const EVENTS=[{date:"Apr 4-12",title:"✈️ Spring Break — Puerto Rico!",type:"v",color:"#f59e0b",big:true},{date:"Apr 27",title:"🎭 Disney On Broadway!",type:"s",color:"#ec4899",note:"💌 Who should we invite?"},{date:"May 19",title:"🎂 Mommy's Birthday!",type:"b",color:PINK,note:"🎭 Peter Pan rehearsals start today too!"},{date:"May 19-22",title:"🎭 Peter Pan Rehearsals",type:"r",color:PURPLE},{date:"May 23",title:"🌟 PETER PAN — SHOW DAY!",type:"s",color:"#ec4899",big:true},{date:"Weekends",title:"🎮 Playdate with Nitaara",type:"p",color:LBLUE}];
-const CHORES={after:[{t:"👟 Shoes on the rack",p:5},{t:"🍱 Lunchbox → sink",p:5},{t:"💧 Water bottle refill",p:5},{t:"🎒 Backpack in spot",p:5},{t:"🧼 Wash hands",p:5},{t:"🍎 Snack → homework",p:5}],daily:[{t:"🛏️ Make bed",p:10},{t:"👗 Tomorrow's clothes out",p:10},{t:"📚 15 min reading",p:15},{t:"🍽️ Clear plate to sink",p:5},{t:"👕 Clothes → hamper",p:5},{t:"🧹 Desk tidy",p:5}]};
-const REWARDS=[{p:200,r:"🍦 Ice cream!"},{p:350,r:"🎮 30 min extra screen"},{p:500,r:"🛍️ $10 shopping"},{p:650,r:"🎬 Movie night pick"},{p:800,r:"⭐ Special outing!"}];
-const PR=[{d:1,t:"Old San Juan 🏰",i:["Walk colorful streets","El Morro fort + kite! 🪁","Pigeon Park 🐦","Piragua shaved ice 🍧","Umbrella street ☂️","Mofongo dinner!"]},{d:2,t:"Rainforest 🌴",i:["El Yunque rainforest!","La Mina Falls 💦","Coquí frogs 🐸","Spot parrots 🦜","Yokahú Tower views","Luquillo lunch"]},{d:3,t:"Beach Day 🏖️",i:["Condado Beach 🏰","Hotel pool 🏊‍♀️","Anita's Gelato 🍦","Sunset at La Ventana 🌅","Collect shells 🐚"]},{d:4,t:"Explore 🗺️",i:["San Cristóbal fort","Junior Ranger badge 🎖️","Paseo de la Princesa","Shopping souvenirs 🛍️","Tostones & empanadas"]},{d:5,t:"Last Day 🌟",i:["El Escambrón beach","Pack & goodbye 😢","Last mofongo!","✈️ Fly home!"]}];
-const YT={piano:[{t:"🎹 Piano for Kids — Hoffman",u:"https://www.youtube.com/watch?v=827jmswqnEA",d:"Fun beginner lessons"},{t:"🎹 Read Music Notes",u:"https://www.youtube.com/watch?v=HhLHXcNp_3E",d:"Treble & bass clef"},{t:"🎹 Ode to Joy Tutorial",u:"https://www.youtube.com/results?search_query=ode+to+joy+easy+piano+kids",d:"Learn your Alfred's piece"}],drums:[{t:"🥁 40 Rudiments — Drumeo",u:"https://www.youtube.com/watch?v=HXKWK1JHQPY",d:"All rudiments demonstrated"},{t:"🥁 Konnakol Basics",u:"https://www.youtube.com/results?search_query=konnakol+beginners+ta+ka+di+mi",d:"South Indian rhythms"},{t:"🥁 Play Along — Rock",u:"https://www.youtube.com/results?search_query=easy+drum+play+along+beginner",d:"Drum along!"}],guitar:[{t:"🎸 First Guitar Notes",u:"https://www.youtube.com/results?search_query=guitar+first+notes+beginner+kids",d:"Your first notes"},{t:"🎸 Em & Am Chords",u:"https://www.youtube.com/results?search_query=em+am+guitar+chord+beginner",d:"Trinity Grade 1 chords"},{t:"🎸 Easy 2-Chord Songs",u:"https://www.youtube.com/results?search_query=easy+guitar+songs+2+chords",d:"Play songs NOW!"}],western_vocal:[{t:"🎤 TWMYB Karaoke",u:"https://www.youtube.com/results?search_query=what+makes+you+beautiful+karaoke",d:"Sing along!"},{t:"🎤 Kids Karaoke Hits",u:"https://www.youtube.com/results?search_query=kids+karaoke+popular+songs",d:"Fun practice"},{t:"🎤 Breathing for Singers",u:"https://www.youtube.com/results?search_query=breathing+exercises+kids+singing",d:"Build breath support"}],perf_vocal:[{t:"🌟 Lean on Me Karaoke",u:"https://www.youtube.com/results?search_query=lean+on+me+karaoke+kids",d:"Your Rockschool song!"},{t:"🌟 Stage Presence Tips",u:"https://www.youtube.com/results?search_query=stage+presence+kids+singing",d:"Own the stage!"},{t:"🌟 A Million Dreams",u:"https://www.youtube.com/results?search_query=a+million+dreams+karaoke+kids",d:"Next Rockschool chapter"}],carnatic:[{t:"🕉️ Sarali Varisai",u:"https://www.youtube.com/results?search_query=sarali+varisai+lesson+1+carnatic",d:"Foundation exercises"},{t:"🕉️ Tanpura Shruti",u:"https://www.youtube.com/results?search_query=tanpura+shruti+sa+practice",d:"Drone for practice"},{t:"🕉️ Adi Tala Pattern",u:"https://www.youtube.com/results?search_query=adi+tala+hand+pattern+carnatic",d:"Learn the clap pattern"}]};
+
+const EXTRA=[{n:"Musical Theatre",e:"🎭",c:"#ec4899",i:"Mon 6-7:30 & Thu 5-6 · Peter Pan Jr!"},{n:"Tennis",e:"🎾",c:"#22c55e",i:"Tue 5-6 · Bob McGuire Park"},{n:"Hip Hop Dance",e:"💃",c:"#f472b6",i:"Sat 11-12 ✨NEW"},{n:"Public Speaking",e:"🎙️",c:"#0ea5e9",i:"Sat 3-4 ✨NEW"},{n:"Art",e:"🎨",c:"#14b8a6",i:"Sun 9-10:30"}];
+
+const EVENTS=[{dt:"Apr 4-12",t:"✈️ Spring Break — Puerto Rico!",c:"#f59e0b",big:1,link:"travel"},{dt:"Apr 27",t:"🎭 Disney On Broadway!",c:"#ec4899",note:"💌 Who should we invite?"},{dt:"May 19",t:"🎂 Mommy's Birthday!",c:PINK,note:"🎭 Peter Pan rehearsals start too!"},{dt:"May 19-22",t:"🎭 Peter Pan Rehearsals",c:PURP},{dt:"May 23",t:"🌟 PETER PAN SHOW DAY!",c:"#ec4899",big:1},{dt:"Weekends",t:"🎮 Playdate with Nitaara",c:LBLU}];
+
+const CH={af:[{t:"👟 Shoes → rack",p:5},{t:"🍱 Lunchbox → sink",p:5},{t:"💧 Bottle → refill",p:5},{t:"🎒 Backpack → spot",p:5},{t:"🧼 Wash hands",p:5},{t:"🍎 Snack time!",p:5}],dy:[{t:"🛏️ Make bed",p:10},{t:"👗 Tomorrow's clothes",p:10},{t:"📚 15 min reading",p:15},{t:"🍽️ Clear plate",p:5},{t:"👕 Clothes → hamper",p:5},{t:"🧹 Tidy desk",p:5}]};
+const RW=[{p:200,r:"🍦 Ice cream!"},{p:350,r:"🎮 +30 min screen"},{p:500,r:"🛍️ $10 shopping!"},{p:650,r:"🎬 Movie pick!"},{p:800,r:"⭐ Special outing!"}];
+
+const PRI=[{d:1,t:"Old San Juan 🏰",i:["Colorful cobblestone streets","El Morro fort + fly a kite! 🪁","Pigeon Park 🐦","Piragua shaved ice 🍧","Umbrella street! ☂️","Mofongo dinner!"]},{d:2,t:"Rainforest! 🌴",i:["El Yunque — ONLY US rainforest!","La Mina Falls 💦","Coquí frogs! 🐸","Spot parrots 🦜","Yokahú Tower views","Luquillo food kiosks"]},{d:3,t:"Beach Day 🏖️",i:["Condado Beach + sandcastles 🏰","Hotel pool time! 🏊‍♀️","Anita's Gelato 🍦","Sunset at La Ventana 🌅","Collect shells 🐚"]},{d:4,t:"Explore! 🗺️",i:["San Cristóbal fort","Junior Ranger badge! 🎖️","Paseo de la Princesa walk","Souvenir shopping! 🛍️","Tostones & empanadas!"]},{d:5,t:"Goodbye 🌟",i:["El Escambrón beach swim","Pack up 😢","Last mofongo!","✈️ Fly home!"]}];
+
+const YT={piano:[{t:"🎹 Hoffman Academy — Piano Basics",u:"https://www.youtube.com/watch?v=827jmswqnEA",d:"Perfect beginner lessons for kids"},{t:"🎹 Read Music Notes — Easy!",u:"https://www.youtube.com/watch?v=HhLHXcNp_3E",d:"Treble & bass clef explained"},{t:"🎹 Ode to Joy — Tutorial",u:"https://www.youtube.com/results?search_query=ode+to+joy+easy+piano+kids+tutorial",d:"Learn your Alfred's piece!"}],drums:[{t:"🥁 40 Rudiments — Drumeo",u:"https://www.youtube.com/watch?v=HXKWK1JHQPY",d:"Every rudiment demonstrated"},{t:"🥁 Konnakol for Beginners",u:"https://www.youtube.com/results?search_query=konnakol+beginners+ta+ka+di+mi",d:"South Indian rhythms!"},{t:"🥁 Easy Drum Play-Along",u:"https://www.youtube.com/results?search_query=easy+drum+play+along+beginner+kids",d:"Drum to a real song!"}],guitar:[{t:"🎸 First Guitar Notes",u:"https://www.youtube.com/results?search_query=guitar+first+notes+beginner+kids",d:"Start here!"},{t:"🎸 Em & Am Chords",u:"https://www.youtube.com/results?search_query=em+am+guitar+chord+beginner+tutorial",d:"Your Trinity Grade 1 chords"},{t:"🎸 2-Chord Songs!",u:"https://www.youtube.com/results?search_query=easy+guitar+songs+2+chords+beginner",d:"Play real songs NOW!"}],western_vocal:[{t:"🎤 TWMYB — Karaoke!",u:"https://www.youtube.com/results?search_query=what+makes+you+beautiful+karaoke+lyrics",d:"Sing along with lyrics!"},{t:"🎤 Kids Karaoke Hits",u:"https://www.youtube.com/results?search_query=kids+karaoke+popular+songs+2025",d:"More songs to practice"},{t:"🎤 Breathing for Singers",u:"https://www.youtube.com/results?search_query=breathing+exercises+kids+singing+beginner",d:"Build breath support"}],perf_vocal:[{t:"🌟 Lean on Me — Karaoke",u:"https://www.youtube.com/results?search_query=lean+on+me+karaoke+kids",d:"Practice your completed song!"},{t:"🌟 Stage Presence!",u:"https://www.youtube.com/results?search_query=stage+presence+tips+kids+performing",d:"Own that Open Mic!"},{t:"🌟 A Million Dreams",u:"https://www.youtube.com/results?search_query=a+million+dreams+karaoke+kids",d:"Your next chapter!"}],carnatic:[{t:"🕉️ Sarali Varisai 1",u:"https://www.youtube.com/results?search_query=sarali+varisai+lesson+1+carnatic+beginner",d:"Foundation exercises"},{t:"🕉️ Tanpura for Practice",u:"https://www.youtube.com/results?search_query=tanpura+shruti+sa+practice+carnatic",d:"Essential drone sound"},{t:"🕉️ Adi Tala — Learn!",u:"https://www.youtube.com/results?search_query=adi+tala+hand+pattern+carnatic+beginner",d:"Clap pattern tutorial"}]};
+
+// ═══ FONT ═══
+const GF = "https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap";
+
+// ═══ APP ═══
 export default function App(){
-const[tab,setTab]=useState("home"),[sel,setSel]=useState("piano"),[pg,setPg]=useState(0),[comp,setComp]=useState(()=>{const o={};INSTRUMENTS.forEach(i=>{o[i.id]=Array(i.chapters.length).fill(false)});o.perf_vocal[0]=true;return o;}),[streaks,setStreaks]=useState(()=>{const o={};INSTRUMENTS.forEach(i=>o[i.id]=Math.floor(Math.random()*6));return o;}),[logged,setLogged]=useState({}),[goals]=useState(()=>{const o={};INSTRUMENTS.forEach(i=>o[i.id]=15);return o;}),[sl,setSL]=useState(["That's What Makes You Beautiful 🎤","Lean on Me 🌟","We Will Rock You 🥁","A Million Dreams ✨"]),[ns,setNS]=useState(""),[con,setCon]=useState(false),[stg,setStg]=useState(false),[chk,setChk]=useState({}),[calOn,setCal]=useState({o:false,g:false}),[pd,setPD]=useState(0),[cv,setCV]=useState("compact");
-const xp=Object.values(comp).reduce((s,a)=>s+a.filter(Boolean).length*100,0),mx=INSTRUMENTS.reduce((s,i)=>s+i.chapters.length*100,0),lv=Math.floor(xp/250)+1,inst=INSTRUMENTS.find(i=>i.id===sel),dn=new Date().toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
-const pop=()=>{setCon(true);setTimeout(()=>setCon(false),2500)},log=(id)=>{if(logged[id])return;setLogged(p=>({...p,[id]:true}));setStreaks(p=>{const n=(p[id]||0)+1;if(n>=7)setStg(true);return{...p,[id]:n}});pop()},togM=(id,idx)=>{setComp(p=>{const a=[...p[id]];a[idx]=!a[idx];if(a[idx])pop();return{...p,[id]:a}})},togC=k=>setChk(p=>({...p,[k]:!p[k]}));
-const cPts=Object.entries(chk).reduce((s,[k,v])=>{if(!v)return s;const all=[...CHORES.after,...CHORES.daily];const idx=parseInt(k.replace(/\D/g,""));return s+(all[idx]?all[idx].p:0)},0),mxP=CHORES.after.reduce((s,c)=>s+c.p,0)+CHORES.daily.reduce((s,c)=>s+c.p,0);
-return(<div style={{display:"flex",minHeight:"100vh",fontFamily:"'Segoe UI',-apple-system,sans-serif",background:"linear-gradient(180deg,#fef3ff 0%,#f0f4ff 40%,#fdf2f8 80%,#fefce8 100%)",position:"relative"}}>
-<Sparkles/><AnimalBand/>
-{con&&<div style={{position:"fixed",inset:0,pointerEvents:"none",zIndex:9999,overflow:"hidden"}}>{Array.from({length:60},(_,i)=><div key={i} style={{position:"absolute",left:`${Math.random()*100}%`,top:-10,width:8+Math.random()*10,height:8+Math.random()*10,background:["#e91e8c","#f59e0b","#60a5fa","#8b5cf6","#22c55e","#f472b6"][i%6],borderRadius:Math.random()>.5?"50%":"3px",animation:`cF 2.5s ${Math.random()*.6}s ease-in forwards`}}/>)}<style>{`@keyframes cF{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(900deg);opacity:0}}`}</style></div>}
-{stg&&<div onClick={()=>setStg(false)} style={{position:"fixed",inset:0,background:"radial-gradient(ellipse at 50% 110%,#4c1d95,#0f172a 70%)",zIndex:9998,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer"}}><div style={{fontSize:90,animation:"pls 1.2s ease-in-out infinite"}}>🎤</div><div style={{fontSize:36,fontWeight:900,color:"#fff",textShadow:"0 0 60px #e91e8c"}}>⭐ SUPERSTAR ZARA ⭐</div><div style={{display:"flex",gap:8,marginTop:16}}>{["🐼","🎹","🥁","🎸","🎤","🐰","🐘","🎵"].map((e,i)=><span key={i} style={{fontSize:28,animation:`fl ${1+i*.2}s ease-in-out infinite alternate`}}>{e}</span>)}</div><div style={{color:"#c084fc88",fontSize:13,marginTop:40}}>✨ tap to close ✨</div><style>{`@keyframes pls{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}@keyframes fl{0%{transform:translateY(0)}100%{transform:translateY(-14px)}}`}</style></div>}
-{/* NAV */}
-<div style={{width:68,background:"linear-gradient(180deg,#fce7f3,#ede9fe,#dbeafe,#fce7f3)",borderRight:"2px solid #f3e8ff",display:"flex",flexDirection:"column",alignItems:"center",paddingTop:10,gap:2,flexShrink:0,zIndex:1}}>
-<div style={{fontSize:22,marginBottom:6,animation:"fl 2s ease-in-out infinite alternate"}}>🐼</div>
-{NAV.map(n=><button key={n.id} onClick={()=>{setTab(n.id);setPg(0)}} title={n.label} style={{width:52,height:52,borderRadius:14,border:tab===n.id?"2px solid #e91e8c":"2px solid transparent",background:tab===n.id?"#fff":"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",transition:"all .15s",boxShadow:tab===n.id?"0 2px 12px #e91e8c33":"none",fontFamily:"inherit"}}><span style={{fontSize:18}}>{n.icon}</span><span style={{fontSize:7,fontWeight:800,color:tab===n.id?"#e91e8c":"#a78bfa",marginTop:1}}>{n.label}</span></button>)}
-<div style={{marginTop:"auto",paddingBottom:12}}><div style={{fontSize:18,animation:"fl 2.5s ease-in-out infinite alternate"}}>🐰</div><div style={{fontSize:14,marginTop:4}}>🐘</div></div></div>
-{/* MAIN */}
-<div style={{flex:1,overflowY:"auto",padding:"16px 20px 50px",zIndex:1,position:"relative"}}><div style={{maxWidth:660,margin:"0 auto"}}>
-<div style={{textAlign:"center",marginBottom:16}}><div style={{fontSize:22,fontWeight:900,color:"#7c3aed"}}>✨ Zara's World ✨</div><div style={{color:"#a78bfa",fontSize:11}}>🐼 {dn}</div><div style={{maxWidth:340,margin:"8px auto 0",background:"#fff",borderRadius:20,height:20,overflow:"hidden",border:"2px solid #f3e8ff",position:"relative"}}><div style={{height:"100%",borderRadius:20,background:"linear-gradient(90deg,#e91e8c,#8b5cf6,#60a5fa)",width:`${Math.min((xp/mx)*100,100)}%`,transition:"width .5s"}}/><div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800,color:"#7c3aed"}}>🐼 Level {lv} · {xp} XP ✨</div></div></div>
-{/* HOME */}
-{tab==="home"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:18,fontWeight:800,color:"#7c3aed",marginBottom:12}}>🌟 Today's Practice 🌟</h2><div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{INSTRUMENTS.map(i=><div key={i.id} onClick={()=>{setSel(i.id);setTab("journey");setPg(0)}} style={{background:"#fff",border:"2px solid #f3e8ff",borderRadius:16,padding:14,cursor:"pointer",transition:"all .15s",textAlign:"center"}} onMouseEnter={e=>{e.currentTarget.style.transform="scale(1.03)";e.currentTarget.style.borderColor="#e91e8c"}} onMouseLeave={e=>{e.currentTarget.style.transform="scale(1)";e.currentTarget.style.borderColor="#f3e8ff"}}><div style={{fontSize:32}}>{i.emoji}</div><div style={{fontSize:12,fontWeight:800,color:i.color,marginTop:2}}>{i.name}</div><div style={{fontSize:9,color:"#a78bfa"}}>🔥 {streaks[i.id]||0}d · {comp[i.id].filter(Boolean).length}/{i.chapters.length}</div><button onClick={e=>{e.stopPropagation();log(i.id)}} disabled={logged[i.id]} style={{marginTop:6,padding:"6px 16px",borderRadius:16,border:"none",fontSize:10,fontWeight:700,fontFamily:"inherit",cursor:logged[i.id]?"default":"pointer",background:logged[i.id]?"#d1fae5":`linear-gradient(135deg,${i.color},#e91e8c)`,color:logged[i.id]?"#059669":"#fff"}}>{logged[i.id]?"✅":"Log "+goals[i.id]+"m"}</button></div>)}</div></div>}
-{/* JOURNEY */}
-{tab==="journey"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:18,fontWeight:800,color:"#7c3aed",marginBottom:4}}>🌳 Musical Journey</h2><div style={{display:"flex",gap:4,justifyContent:"center",flexWrap:"wrap",marginBottom:12}}>{INSTRUMENTS.map(i=><button key={i.id} onClick={()=>{setSel(i.id);setPg(0)}} style={{padding:"6px 10px",borderRadius:14,border:sel===i.id?`2px solid ${i.color}`:"2px solid #f3e8ff",background:sel===i.id?"#fff":"transparent",color:sel===i.id?i.color:"#a78bfa",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{i.emoji}</button>)}</div>
-{inst&&<><div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:8,flexWrap:"wrap"}}>{inst.classes.map((c,i)=><div key={i} style={{background:"#fff",border:"1px solid #f3e8ff",borderRadius:8,padding:"3px 8px",fontSize:8,color:"#7c3aed"}}>{c.teacher} · {c.day} {c.time}</div>)}</div>
-<div style={{background:"linear-gradient(135deg,#fce7f3,#ede9fe)",border:"2px solid #f3e8ff",borderRadius:18,padding:16,marginBottom:14}}>
-<div style={{fontSize:14,fontWeight:800,color:inst.color}}>📖 Practice Pages</div>
-{inst.pages&&inst.pages.length>0&&<><div style={{background:"#fff",borderRadius:14,padding:16,marginTop:10,minHeight:160,textAlign:"left",border:"2px solid #f3e8ff"}}><div style={{fontSize:13,fontWeight:800,color:"#7c3aed",marginBottom:8}}>{inst.pages[Math.min(pg,inst.pages.length-1)].title}</div><pre style={{fontSize:12,color:"#334155",lineHeight:1.7,whiteSpace:"pre-wrap",fontFamily:"inherit",margin:0}}>{inst.pages[Math.min(pg,inst.pages.length-1)].content}</pre></div>
-<div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:12,marginTop:10}}><button onClick={()=>setPg(p=>Math.max(0,p-1))} disabled={pg===0} style={{padding:"6px 14px",borderRadius:10,border:"2px solid #e91e8c44",background:"#fff",color:pg===0?"#ddd":"#e91e8c",fontSize:12,fontWeight:700,cursor:pg===0?"default":"pointer",fontFamily:"inherit"}}>← Prev</button><span style={{fontSize:11,fontWeight:700,color:"#a78bfa"}}>{Math.min(pg+1,inst.pages.length)}/{inst.pages.length}</span><button onClick={()=>setPg(p=>Math.min(inst.pages.length-1,p+1))} disabled={pg>=inst.pages.length-1} style={{padding:"6px 14px",borderRadius:10,border:"2px solid #e91e8c44",background:"#fff",color:pg>=inst.pages.length-1?"#ddd":"#e91e8c",fontSize:12,fontWeight:700,cursor:pg>=inst.pages.length-1?"default":"pointer",fontFamily:"inherit"}}>Next →</button></div></>}
-<div style={{marginTop:10,display:"flex",flexDirection:"column",gap:3,textAlign:"left"}}>{inst.tips.map((t,i)=><div key={i} style={{background:"#fff",borderRadius:8,padding:"4px 10px",fontSize:10,color:"#4c1d95"}}>{t}</div>)}</div>
-<button onClick={()=>log(inst.id)} disabled={logged[inst.id]} style={{marginTop:10,padding:"8px 24px",borderRadius:20,border:"none",background:logged[inst.id]?"#d1fae5":`linear-gradient(135deg,${inst.color},#e91e8c)`,color:logged[inst.id]?"#059669":"#fff",fontSize:12,fontWeight:800,cursor:logged[inst.id]?"default":"pointer",fontFamily:"inherit"}}>{logged[inst.id]?"✅ Logged!":"✨ Log Practice ✨"}</button></div>
-<div style={{position:"relative",paddingLeft:32,textAlign:"left"}}><div style={{position:"absolute",left:14,top:0,bottom:0,width:3,background:"#f3e8ff",borderRadius:2}}/>{inst.chapters.map((ch,idx)=>{const done=comp[inst.id][idx],locked=idx>0&&!comp[inst.id][idx-1],cur=!done&&(idx===0||comp[inst.id][idx-1]);return<div key={idx} onClick={()=>!locked&&togM(inst.id,idx)} style={{display:"flex",alignItems:"center",gap:10,marginBottom:6,cursor:locked?"default":"pointer",opacity:locked?.3:1,background:done?"#d1fae5":cur?"#fce7f3":"#fff",border:`2px solid ${done?"#22c55e33":cur?"#e91e8c33":"#f3e8ff"}`,borderRadius:12,padding:"8px 12px",position:"relative"}}><div style={{position:"absolute",left:-24,width:20,height:20,borderRadius:"50%",background:done?"#22c55e":cur?"#e91e8c":"#fff",border:`2px solid ${done?"#22c55e":cur?"#e91e8c":"#d1d5db"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:done||cur?"#fff":"#999",zIndex:1}}>{done?"✓":cur?"★":idx+1}</div><div style={{flex:1,marginLeft:4}}><div style={{fontSize:11,fontWeight:700,color:done?"#059669":cur?"#e91e8c":"#334155"}}>{ch}</div></div></div>})}</div></>}</div>}
-{/* WEEK */}
-{tab==="week"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:18,fontWeight:800,color:"#7c3aed",marginBottom:12}}>🗓️ My Super Week</h2>{["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map(day=>{const music=INSTRUMENTS.filter(i=>i.classes.some(c=>c.day.includes(day.slice(0,3))));const other=OTHER.filter(o=>o.info.toLowerCase().includes(day.slice(0,3).toLowerCase()));const all=[...music.map(m=>({emoji:m.emoji,name:m.name,color:m.color,info:m.classes.map(c=>c.time+" · "+c.teacher).join(" | ")})),...other.map(o=>({emoji:o.emoji,name:o.name,color:o.color,info:o.info}))];return<div key={day} style={{marginBottom:10}}><div style={{fontSize:12,fontWeight:800,color:"#a78bfa",textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>{day}{day==="Wednesday"?" — Breather! 🌿":day==="Sunday"?" — Free! 🎮":""}</div>{all.length===0?<div style={{fontSize:10,color:"#cbd5e1",padding:6}}>Rest! 💤</div>:all.map((c,i)=><div key={i} style={{background:"#fff",border:"2px solid #f3e8ff",borderRadius:12,padding:"8px 14px",marginBottom:3,display:"flex",alignItems:"center",gap:8,textAlign:"left"}}><span style={{fontSize:20}}>{c.emoji}</span><div style={{flex:1}}><div style={{fontSize:12,fontWeight:700,color:c.color}}>{c.name}</div><div style={{fontSize:9,color:"#a78bfa"}}>{c.info}</div></div></div>)}</div>})}</div>}
-{/* CALENDAR */}
-{tab==="calendar"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:18,fontWeight:800,color:"#7c3aed",marginBottom:4}}>📅 Coming Up!</h2><div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:8}}>{[["compact","Compact"],["full","Full"]].map(([v,l])=><button key={v} onClick={()=>setCV(v)} style={{padding:"4px 10px",borderRadius:8,border:cv===v?"2px solid #e91e8c":"2px solid #f3e8ff",background:cv===v?"#fff":"transparent",color:cv===v?"#e91e8c":"#a78bfa",fontSize:9,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div><div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:8}}>{[["o","📧 Mom"],["g","📬 Zara"]].map(([k,l])=><button key={k} onClick={()=>setCal(p=>({...p,[k]:!p[k]}))} style={{padding:"6px 12px",borderRadius:10,border:`2px solid ${calOn[k]?"#22c55e":"#f3e8ff"}`,background:calOn[k]?"#d1fae5":"#fff",color:calOn[k]?"#059669":"#a78bfa",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{calOn[k]?"✅":"🔗"} {l}</button>)}</div><div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:10}}>{["March","April","May"].map(m=><div key={m} style={{background:"#fff",border:"2px solid #f3e8ff",borderRadius:8,padding:"4px 12px",fontSize:10,fontWeight:700,color:"#7c3aed",flex:1}}>{m} 2026</div>)}</div><div style={{display:"flex",flexDirection:"column",gap:cv==="compact"?4:8,textAlign:"left"}}>{EVENTS.map((ev,i)=><div key={i} style={{background:"#fff",border:ev.big?`3px solid ${ev.color}44`:"2px solid #f3e8ff",borderRadius:cv==="compact"?10:16,padding:cv==="compact"?"8px 12px":"14px 18px",borderLeft:`4px solid ${ev.color}`}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><div style={{fontSize:cv==="compact"?11:14,fontWeight:800,color:ev.color}}>{ev.title}</div><div style={{fontSize:9,color:"#a78bfa"}}>{ev.date}</div></div>{ev.big&&<span style={{fontSize:16}}>🌟</span>}</div>{ev.note&&cv==="full"&&<div style={{marginTop:4,background:"#fce7f3",borderRadius:8,padding:"4px 8px",fontSize:9,color:"#7c3aed",fontWeight:600}}>{ev.note}</div>}{ev.title.includes("Puerto")&&<button onClick={()=>setTab("travel")} style={{marginTop:4,padding:"4px 10px",borderRadius:8,border:"2px solid #f59e0b",background:"#fffbeb",color:"#92400e",fontSize:9,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>✈️ Trip plan!</button>}</div>)}</div></div>}
-{/* CHORES */}
-{tab==="chores"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:18,fontWeight:800,color:"#7c3aed",marginBottom:4}}>⭐ Today's Points</h2><p style={{color:"#a78bfa",fontSize:10,marginBottom:8}}>{dn}</p><div style={{background:"linear-gradient(135deg,#fce7f3,#ede9fe)",borderRadius:16,padding:14,marginBottom:14}}><div style={{fontSize:32,fontWeight:900,color:"#7c3aed"}}>{cPts} pts</div><div style={{fontSize:10,color:"#a78bfa"}}>of {mxP} today · {mxP*7}/week</div><div style={{marginTop:6,background:"#fff",borderRadius:12,height:14,overflow:"hidden",border:"2px solid #f3e8ff"}}><div style={{height:"100%",borderRadius:12,background:"linear-gradient(90deg,#e91e8c,#f59e0b)",width:`${(cPts/mxP)*100}%`,transition:"width .3s"}}/></div></div><div style={{textAlign:"left"}}><h3 style={{fontSize:12,fontWeight:800,color:"#e91e8c",marginBottom:4}}>🏠 After-School (3 min! ⏱️)</h3>{CHORES.after.map((c,i)=><div key={"a"+i} onClick={()=>togC("a"+i)} style={{background:chk["a"+i]?"#d1fae5":"#fff",border:"2px solid #f3e8ff",borderRadius:10,padding:"6px 10px",marginBottom:3,cursor:"pointer",display:"flex",alignItems:"center",gap:8}}><div style={{width:18,height:18,borderRadius:5,border:`2px solid ${chk["a"+i]?"#22c55e":"#d1d5db"}`,background:chk["a"+i]?"#22c55e":"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff",fontWeight:800,flexShrink:0}}>{chk["a"+i]?"✓":""}</div><span style={{fontSize:11,fontWeight:600,color:chk["a"+i]?"#059669":"#334155",textDecoration:chk["a"+i]?"line-through":"none",flex:1}}>{c.t}</span><span style={{fontSize:9,fontWeight:700,color:chk["a"+i]?"#22c55e":"#a78bfa"}}>+{c.p}</span></div>)}<h3 style={{fontSize:12,fontWeight:800,color:"#8b5cf6",marginTop:10,marginBottom:4}}>🌟 Daily Habits</h3>{CHORES.daily.map((c,i)=><div key={"d"+i} onClick={()=>togC("d"+i)} style={{background:chk["d"+i]?"#d1fae5":"#fff",border:"2px solid #f3e8ff",borderRadius:10,padding:"6px 10px",marginBottom:3,cursor:"pointer",display:"flex",alignItems:"center",gap:8}}><div style={{width:18,height:18,borderRadius:5,border:`2px solid ${chk["d"+i]?"#22c55e":"#d1d5db"}`,background:chk["d"+i]?"#22c55e":"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff",fontWeight:800,flexShrink:0}}>{chk["d"+i]?"✓":""}</div><span style={{fontSize:11,fontWeight:600,color:chk["d"+i]?"#059669":"#334155",textDecoration:chk["d"+i]?"line-through":"none",flex:1}}>{c.t}</span><span style={{fontSize:9,fontWeight:700,color:chk["d"+i]?"#22c55e":"#a78bfa"}}>+{c.p}</span></div>)}</div><div style={{marginTop:10,background:"#fff",border:"2px solid #f3e8ff",borderRadius:12,padding:10,textAlign:"left"}}><div style={{fontSize:11,fontWeight:800,color:"#7c3aed",marginBottom:4}}>🏆 Weekly Rewards</div>{REWARDS.map((r,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",fontSize:10,marginBottom:3,color:cPts*7>=r.p?"#059669":"#a78bfa"}}><span>{cPts*7>=r.p?"✅":"⬜"} {r.r}</span><span style={{fontWeight:700}}>{r.p}pts</span></div>)}</div></div>}
-{/* TRAVEL */}
-{tab==="travel"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:20,fontWeight:900,color:"#f59e0b",marginBottom:2}}>✈️ Puerto Rico! 🇵🇷</h2><p style={{color:"#7c3aed",fontSize:11,fontWeight:700}}>April 4-12 · San Juan</p><div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:10,marginTop:8}}>{PR.map((d,i)=><button key={i} onClick={()=>setPD(i)} style={{width:38,height:38,borderRadius:10,border:pd===i?"2px solid #f59e0b":"2px solid #f3e8ff",background:pd===i?"#fef3c7":"#fff",color:pd===i?"#92400e":"#a78bfa",fontSize:9,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>{d.d}</button>)}</div><div style={{background:"#fff",border:"2px solid #fef3c7",borderRadius:16,padding:14,textAlign:"left"}}><div style={{fontSize:14,fontWeight:800,color:"#f59e0b",marginBottom:8}}>Day {PR[pd].d}: {PR[pd].t}</div>{PR[pd].i.map((item,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:5}}><div style={{width:20,height:20,borderRadius:"50%",background:"#fef3c7",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:"#92400e",flexShrink:0}}>{i+1}</div><span style={{fontSize:11,color:"#334155"}}>{item}</span></div>)}</div></div>}
-{/* DISCOVER */}
-{tab==="discover"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:18,fontWeight:800,color:"#7c3aed",marginBottom:8}}>🎥 Watch & Learn!</h2><div style={{display:"flex",gap:4,justifyContent:"center",flexWrap:"wrap",marginBottom:10}}>{INSTRUMENTS.filter(i=>YT[i.id]).map(i=><button key={i.id} onClick={()=>setSel(i.id)} style={{padding:"5px 8px",borderRadius:12,border:sel===i.id?`2px solid ${i.color}`:"2px solid #f3e8ff",background:sel===i.id?"#fff":"transparent",color:sel===i.id?i.color:"#a78bfa",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{i.emoji}</button>)}</div>{YT[sel]&&YT[sel].map((v,i)=><a key={i} href={v.u} target="_blank" rel="noopener noreferrer" style={{display:"block",background:"#fff",border:"2px solid #f3e8ff",borderRadius:12,padding:"10px 14px",marginBottom:6,textDecoration:"none",textAlign:"left",transition:"border-color .15s"}} onMouseEnter={e=>e.currentTarget.style.borderColor="#e91e8c"} onMouseLeave={e=>e.currentTarget.style.borderColor="#f3e8ff"}><div style={{fontSize:12,fontWeight:700,color:"#7c3aed"}}>{v.t} ↗</div><div style={{fontSize:10,color:"#a78bfa",marginTop:2}}>{v.d}</div></a>)}</div>}
-{/* SETLIST */}
-{tab==="setlist"&&<div style={{textAlign:"center"}}><h2 style={{fontSize:18,fontWeight:800,color:"#7c3aed",marginBottom:10}}>🎶 My Concert</h2>{sl.map((s,i)=><div key={i} style={{background:"#fff",border:"2px solid #f3e8ff",borderRadius:12,padding:"8px 12px",marginBottom:4,display:"flex",justifyContent:"space-between",alignItems:"center"}}><div style={{display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:16,fontWeight:900,color:"#f59e0b"}}>{i+1}</span><span style={{fontSize:12,fontWeight:700,color:"#4c1d95"}}>{s}</span></div><button onClick={()=>setSL(p=>p.filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:"#ef4444",cursor:"pointer",fontSize:12}}>✕</button></div>)}<div style={{display:"flex",gap:4,marginTop:8}}><input value={ns} onChange={e=>setNS(e.target.value)} placeholder="Add a song 🎵" onKeyDown={e=>{if(e.key==="Enter"&&ns.trim()){setSL(p=>[...p,ns.trim()]);setNS("")}}} style={{flex:1,padding:"8px 10px",borderRadius:10,border:"2px solid #f3e8ff",background:"#fff",fontSize:11,fontFamily:"inherit",outline:"none"}}/><button onClick={()=>{if(ns.trim()){setSL(p=>[...p,ns.trim()]);setNS("")}}} style={{padding:"8px 14px",borderRadius:10,border:"none",background:"linear-gradient(135deg,#e91e8c,#8b5cf6)",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Add</button></div></div>}
-</div></div></div>)}
+  const[tab,setTab]=useState("home"),[sel,setSel]=useState("piano"),[pg,setPg]=useState(0);
+  const[comp,setComp]=useState(()=>{const o={};INST.forEach(i=>{o[i.id]=Array(i.ch.length).fill(false)});o.perf_vocal[0]=true;return o});
+  const[streaks,setStreaks]=useState(()=>{const o={};INST.forEach(i=>o[i.id]=Math.floor(Math.random()*6));return o});
+  const[logged,setLogged]=useState({}),[goals]=useState(()=>{const o={};INST.forEach(i=>o[i.id]=15);return o});
+  const[sl,setSL]=useState(["That's What Makes You Beautiful 🎤","Lean on Me 🌟","We Will Rock You 🥁","A Million Dreams ✨"]);
+  const[ns,setNS]=useState(""),[con,setCon]=useState(false),[stg,setStg]=useState(false),[chk,setChk]=useState({});
+  const[calOn,setCal]=useState({o:false,g:false}),[pd,setPD]=useState(0),[cv,setCV]=useState("compact");
+
+  const xp=Object.values(comp).reduce((s,a)=>s+a.filter(Boolean).length*100,0);
+  const mx=INST.reduce((s,i)=>s+i.ch.length*100,0);
+  const lv=Math.floor(xp/250)+1;
+  const inst=INST.find(i=>i.id===sel);
+  const dn=new Date().toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+
+  const pop=()=>{setCon(true);setTimeout(()=>setCon(false),3000)};
+  const log=id=>{if(logged[id])return;setLogged(p=>({...p,[id]:true}));setStreaks(p=>{const n=(p[id]||0)+1;if(n>=7)setStg(true);return{...p,[id]:n}});pop()};
+  const togM=(id,idx)=>{setComp(p=>{const a=[...p[id]];a[idx]=!a[idx];if(a[idx])pop();return{...p,[id]:a}})};
+  const togC=k=>setChk(p=>({...p,[k]:!p[k]}));
+
+  const cPts=Object.entries(chk).reduce((s,[k,v])=>{if(!v)return s;const all=[...CH.af,...CH.dy];const idx=parseInt(k.replace(/\D/g,""));return s+(all[idx]?all[idx].p:0)},0);
+  const mxP=[...CH.af,...CH.dy].reduce((s,c)=>s+c.p,0);
+
+  const ff="'Fredoka','Comic Neue',cursive,sans-serif";
+  const card={background:"rgba(255,255,255,.85)",backdropFilter:"blur(8px)",border:"2px solid rgba(233,215,255,.5)",borderRadius:20,padding:16,marginBottom:10,boxShadow:"0 4px 20px rgba(139,92,246,.06)"};
+  const pill=(active,color)=>({padding:"7px 14px",borderRadius:20,border:`2px solid ${active?color:"rgba(233,215,255,.5)"}`,background:active?"rgba(255,255,255,.9)":"transparent",color:active?color:"#a78bfa",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:ff,transition:"all .2s",boxShadow:active?`0 2px 10px ${color}22`:"none"});
+
+  return(<div style={{display:"flex",minHeight:"100vh",fontFamily:ff,background:"linear-gradient(160deg,#fef9ff 0%,#f0e6ff 20%,#e8f4fd 40%,#fdf2f8 60%,#fefce8 80%,#f0fdf4 100%)",position:"relative"}}>
+    <link href={GF} rel="stylesheet"/>
+    <FloatingNotes/><Sparkles/><AnimalParty/><Confetti show={con}/>
+    {stg&&<StageMode onClose={()=>setStg(false)}/>}
+
+    {/* ═══ FUN CARTOON NAV ═══ */}
+    <div style={{width:88,background:"linear-gradient(180deg,#fce7f3 0%,#ede9fe 30%,#dbeafe 60%,#d1fae5 85%,#fef3c7 100%)",borderRight:"3px solid #e9d5ff",display:"flex",flexDirection:"column",alignItems:"center",paddingTop:10,gap:0,flexShrink:0,zIndex:4,position:"relative",overflow:"visible"}}>
+      {/* Panda mascot at top */}
+      <div style={{fontSize:32,marginBottom:6,cursor:"default",animation:"mascotWiggle 3s ease-in-out infinite",filter:"drop-shadow(0 2px 4px rgba(0,0,0,.1))"}}>🐼</div>
+      <div style={{fontSize:8,fontWeight:700,color:"#7c3aed",marginBottom:8,letterSpacing:1}}>ZARA</div>
+      {/* Nav items as fun bubbles */}
+      {NAV.map((n,i)=>{
+        const active=tab===n.id;
+        const shapes=[
+          {w:58,h:52,br:"50% 50% 50% 20%",ml:-2},  // home - speech bubble
+          {w:54,h:54,br:"50%",ml:4},                  // journey - circle
+          {w:60,h:48,br:"24px 24px 8px 8px",ml:-3},  // week - tab shape
+          {w:50,h:56,br:"20% 50% 50% 20%",ml:6},     // calendar - leaf
+          {w:56,h:50,br:"50% 20% 50% 20%",ml:0},     // points - diamond-ish
+          {w:52,h:52,br:"40% 60% 60% 40%",ml:5},     // trip - blob
+          {w:58,h:48,br:"8px 24px 24px 8px",ml:-4},   // watch - ticket
+          {w:50,h:54,br:"50% 50% 20% 50%",ml:3},     // songs - note shape
+        ][i]||{w:54,h:54,br:"50%",ml:0};
+        const colors=["#e91e8c","#8b5cf6","#60a5fa","#22c55e","#f59e0b","#f97316","#ef4444","#ec4899"];
+        const bgColors=["#fce7f3","#ede9fe","#dbeafe","#d1fae5","#fef3c7","#fff7ed","#fee2e2","#fdf2f8"];
+        return <button key={n.id} onClick={()=>{setTab(n.id);setPg(0)}} style={{
+          width:shapes.w,height:shapes.h,borderRadius:shapes.br,marginLeft:shapes.ml,
+          border:active?`3px solid ${colors[i]}`:"2.5px solid rgba(255,255,255,.6)",
+          background:active?`linear-gradient(135deg,${bgColors[i]},#fff)`:bgColors[i]+"88",
+          cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+          transition:"all .25s cubic-bezier(.34,1.56,.64,1)",fontFamily:ff,position:"relative",
+          boxShadow:active?`0 4px 18px ${colors[i]}44, inset 0 -2px 4px rgba(0,0,0,.05)`:"0 2px 6px rgba(0,0,0,.06)",
+          transform:active?"scale(1.12) rotate(-2deg)":"scale(1) rotate(0deg)",
+          marginBottom:2,zIndex:active?3:1
+        }}>
+          <span style={{fontSize:active?24:19,transition:"font-size .2s",filter:active?"drop-shadow(0 1px 3px rgba(0,0,0,.15))":"none"}}>{n.icon}</span>
+          <span style={{fontSize:active?8:7,fontWeight:700,color:active?colors[i]:"#a78bfa",marginTop:1,transition:"all .2s"}}>{n.l}</span>
+          {active&&<div style={{position:"absolute",right:-6,top:"50%",marginTop:-5,width:10,height:10,background:colors[i],borderRadius:"50%",boxShadow:`0 0 8px ${colors[i]}66`}}/>}
+        </button>
+      })}
+      {/* Bottom animals */}
+      <div style={{marginTop:"auto",paddingBottom:10,display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
+        <div style={{fontSize:22,animation:"mascotWiggle 2.5s .3s ease-in-out infinite",cursor:"default"}}>🐰</div>
+        <div style={{fontSize:18,animation:"mascotWiggle 3s .6s ease-in-out infinite",cursor:"default"}}>🐘</div>
+        <div style={{fontSize:16,animation:"mascotWiggle 2s .9s ease-in-out infinite",cursor:"default"}}>🦊</div>
+      </div>
+      <style>{`
+        @keyframes mascotWiggle{0%,100%{transform:translateY(0) rotate(0deg)}25%{transform:translateY(-4px) rotate(-5deg)}75%{transform:translateY(-2px) rotate(5deg)}}
+      `}</style>
+    </div>
+
+    {/* ═══ MAIN CONTENT ═══ */}
+    <div style={{flex:1,overflowY:"auto",padding:"20px 24px 300px",zIndex:1,position:"relative"}}>
+      <div style={{maxWidth:680,margin:"0 auto"}}>
+
+      {/* HEADER */}
+      <div style={{textAlign:"center",marginBottom:20}}>
+        <div style={{fontSize:28,fontWeight:700,color:"#7c3aed",letterSpacing:-.5}}>✨ Zara's World ✨</div>
+        <div style={{color:"#a78bfa",fontSize:12,marginTop:2}}>🐼 Music · Dance · Theater · Adventures · {dn}</div>
+        <div style={{maxWidth:360,margin:"10px auto 0",background:"rgba(255,255,255,.7)",borderRadius:24,height:24,overflow:"hidden",border:"2px solid rgba(233,215,255,.5)",position:"relative",backdropFilter:"blur(4px)"}}>
+          <div style={{height:"100%",borderRadius:24,background:"linear-gradient(90deg,#e91e8c,#8b5cf6,#60a5fa,#22c55e)",width:`${Math.min((xp/mx)*100,100)}%`,transition:"width .6s ease-out"}}/>
+          <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#7c3aed"}}>🐼 Level {lv} · {xp} XP ✨</div>
+        </div>
+      </div>
+
+      {/* ═══ HOME ═══ */}
+      {tab==="home"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#7c3aed",marginBottom:14}}>🌟 Today's Practice 🌟</h2>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+          {INST.map((i,idx)=><div key={i.id} onClick={()=>{setSel(i.id);setTab("journey");setPg(0)}} style={{...card,cursor:"pointer",textAlign:"center",animation:`fadeSlideUp .4s ${idx*.06}s both ease-out`,transition:"transform .2s, box-shadow .2s"}} onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-4px) scale(1.02)";e.currentTarget.style.boxShadow=`0 8px 30px ${i.color}22`}} onMouseLeave={e=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="0 4px 20px rgba(139,92,246,.06)"}}>
+            <div style={{fontSize:38}}>{i.emoji}</div>
+            <div style={{fontSize:13,fontWeight:700,color:i.color,marginTop:4}}>{i.name}</div>
+            <div style={{fontSize:10,color:"#a78bfa",marginTop:2}}>🔥 {streaks[i.id]||0}d streak · {comp[i.id].filter(Boolean).length}/{i.ch.length}</div>
+            <button onClick={e=>{e.stopPropagation();log(i.id)}} disabled={logged[i.id]} style={{marginTop:8,padding:"8px 20px",borderRadius:20,border:"none",fontSize:11,fontWeight:700,fontFamily:ff,cursor:logged[i.id]?"default":"pointer",background:logged[i.id]?"#d1fae5":`linear-gradient(135deg,${i.color},#e91e8c)`,color:logged[i.id]?"#059669":"#fff",boxShadow:logged[i.id]?"none":`0 3px 12px ${i.color}33`,transition:"all .2s"}}>{logged[i.id]?"✅ Done!":"Log "+goals[i.id]+"m"}</button>
+          </div>)}
+        </div>
+        <div style={{...card,marginTop:16,background:"linear-gradient(135deg,rgba(252,231,243,.7),rgba(237,233,254,.7))",textAlign:"center"}}>
+          <div style={{fontSize:12,color:"#7c3aed"}}>Combined Musician Streak</div>
+          <div style={{fontSize:40,fontWeight:700,color:"#4c1d95",marginTop:4}}>{Math.min(...Object.values(streaks))} days {Math.min(...Object.values(streaks))>=7?"🏟️":"🔥"}</div>
+          {Math.min(...Object.values(streaks))>=7&&<button onClick={()=>setStg(true)} style={{marginTop:8,padding:"10px 24px",borderRadius:24,border:"3px solid #8b5cf6",background:"rgba(255,255,255,.8)",color:"#8b5cf6",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:ff,animation:"stagePulse 2s infinite"}}>🎤 STAGE MODE 🎤</button>}
+        </div>
+        <style>{`@keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`}</style>
+      </div>}
+
+      {/* ═══ JOURNEY ═══ */}
+      {tab==="journey"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#7c3aed",marginBottom:6}}>🌳 Musical Journey</h2>
+        <p style={{color:"#a78bfa",fontSize:11,marginBottom:12}}>Pick → Practice → Log → Level Up! ✨</p>
+        <div style={{display:"flex",gap:5,justifyContent:"center",flexWrap:"wrap",marginBottom:14}}>
+          {INST.map(i=><button key={i.id} onClick={()=>{setSel(i.id);setPg(0)}} style={pill(sel===i.id,i.color)}>{i.emoji} {i.name.split(" ")[0]}</button>)}
+        </div>
+        {inst&&<>
+          <div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:10,flexWrap:"wrap"}}>{inst.cls.map((c,i)=><div key={i} style={{background:"rgba(255,255,255,.6)",borderRadius:10,padding:"4px 10px",fontSize:9,color:"#7c3aed",border:"1px solid rgba(233,215,255,.4)"}}>{c.t} · {c.d}</div>)}</div>
+          {/* Practice Pages */}
+          <div style={{...card,background:"linear-gradient(135deg,rgba(252,231,243,.6),rgba(237,233,254,.6))"}}>
+            <div style={{fontSize:16,fontWeight:700,color:inst.color}}>📖 Practice Pages</div>
+            {inst.pages&&inst.pages.length>0&&<>
+              <div style={{background:"rgba(255,255,255,.9)",borderRadius:16,padding:18,marginTop:10,minHeight:180,textAlign:"left",border:"2px solid rgba(233,215,255,.4)",position:"relative"}}>
+                <div style={{position:"absolute",top:10,right:14,fontSize:9,color:"#a78bfa",fontWeight:700}}>{Math.min(pg+1,inst.pages.length)} / {inst.pages.length}</div>
+                <div style={{fontSize:15,fontWeight:700,color:"#7c3aed",marginBottom:10}}>{inst.pages[Math.min(pg,inst.pages.length-1)].t}</div>
+                <pre style={{fontSize:13,color:"#334155",lineHeight:1.8,whiteSpace:"pre-wrap",fontFamily:ff,margin:0}}>{inst.pages[Math.min(pg,inst.pages.length-1)].c}</pre>
+              </div>
+              <div style={{display:"flex",justifyContent:"center",alignItems:"center",gap:8,marginTop:12}}>
+                <button onClick={()=>setPg(p=>Math.max(0,p-1))} disabled={pg===0} style={{padding:"8px 18px",borderRadius:14,border:"none",background:pg===0?"#f1f5f9":"linear-gradient(135deg,#e91e8c,#8b5cf6)",color:pg===0?"#cbd5e1":"#fff",fontSize:12,fontWeight:700,cursor:pg===0?"default":"pointer",fontFamily:ff,boxShadow:pg===0?"none":"0 2px 8px rgba(139,92,246,.2)"}}>← Back</button>
+                <div style={{display:"flex",gap:3}}>{inst.pages.map((_,i)=><div key={i} style={{width:8,height:8,borderRadius:4,background:i===pg?"#e91e8c":"#e9d5ff",transition:"all .2s"}}/>)}</div>
+                <button onClick={()=>setPg(p=>Math.min(inst.pages.length-1,p+1))} disabled={pg>=inst.pages.length-1} style={{padding:"8px 18px",borderRadius:14,border:"none",background:pg>=inst.pages.length-1?"#f1f5f9":"linear-gradient(135deg,#8b5cf6,#e91e8c)",color:pg>=inst.pages.length-1?"#cbd5e1":"#fff",fontSize:12,fontWeight:700,cursor:pg>=inst.pages.length-1?"default":"pointer",fontFamily:ff,boxShadow:pg>=inst.pages.length-1?"none":"0 2px 8px rgba(139,92,246,.2)"}}>Next →</button>
+              </div>
+            </>}
+            <div style={{marginTop:12,display:"flex",flexDirection:"column",gap:4,textAlign:"left"}}>{inst.tips.map((t,i)=><div key={i} style={{background:"rgba(255,255,255,.7)",borderRadius:10,padding:"6px 12px",fontSize:11,color:"#4c1d95"}}>{t}</div>)}</div>
+            <button onClick={()=>log(inst.id)} disabled={logged[inst.id]} style={{marginTop:14,padding:"10px 28px",borderRadius:24,border:"none",background:logged[inst.id]?"#d1fae5":"linear-gradient(135deg,"+inst.color+",#e91e8c)",color:logged[inst.id]?"#059669":"#fff",fontSize:14,fontWeight:700,cursor:logged[inst.id]?"default":"pointer",fontFamily:ff,boxShadow:logged[inst.id]?"none":"0 4px 16px rgba(233,30,140,.25)"}}>{logged[inst.id]?"✅ Practice Logged!":"✨ Log Practice ✨"}</button>
+          </div>
+          {/* Milestones */}
+          <div style={{position:"relative",paddingLeft:34,textAlign:"left",marginTop:8}}>
+            <div style={{position:"absolute",left:15,top:0,bottom:0,width:3,background:"linear-gradient(180deg,#e91e8c33,#8b5cf633,#60a5fa33)",borderRadius:2}}/>
+            {inst.ch.map((c,idx)=>{const done=comp[inst.id][idx],locked=idx>0&&!comp[inst.id][idx-1],cur=!done&&(idx===0||comp[inst.id][idx-1]);
+            return <div key={idx} onClick={()=>!locked&&togM(inst.id,idx)} style={{display:"flex",alignItems:"center",gap:10,marginBottom:7,cursor:locked?"default":"pointer",opacity:locked?.25:1,background:done?"rgba(209,250,229,.7)":cur?"rgba(252,231,243,.7)":"rgba(255,255,255,.7)",border:`2px solid ${done?"rgba(34,197,94,.2)":cur?"rgba(233,30,140,.2)":"rgba(233,215,255,.3)"}`,borderRadius:14,padding:"9px 14px",position:"relative",transition:"all .2s",backdropFilter:"blur(4px)"}}>
+              <div style={{position:"absolute",left:-26,width:22,height:22,borderRadius:"50%",background:done?"#22c55e":cur?"#e91e8c":"rgba(255,255,255,.9)",border:`2.5px solid ${done?"#22c55e":cur?"#e91e8c":"#d1d5db"}`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:done||cur?"#fff":"#999",zIndex:1,boxShadow:cur?"0 0 8px rgba(233,30,140,.3)":"none"}}>{done?"✓":cur?"★":idx+1}</div>
+              <div style={{flex:1,marginLeft:4}}><div style={{fontSize:12,fontWeight:700,color:done?"#059669":cur?"#e91e8c":"#334155"}}>{c}</div><div style={{fontSize:9,color:done?"#22c55e":cur?"#e91e8c99":"#999"}}>{locked?"🔒 Previous first":done?"🎉 +100 XP!":cur?"⭐ Current":"+100 XP"}</div></div>
+            </div>})}
+          </div>
+        </>}
+      </div>}
+
+      {/* ═══ WEEK ═══ */}
+      {tab==="week"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#7c3aed",marginBottom:14}}>🗓️ My Super Week</h2>
+        {["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map((day,di)=>{
+          const mu=INST.filter(i=>i.cls.some(c=>c.d.toLowerCase().includes(day.slice(0,3).toLowerCase())));
+          const ot=EXTRA.filter(o=>o.i.toLowerCase().includes(day.slice(0,3).toLowerCase()));
+          const all=[...mu.map(m=>({e:m.emoji,n:m.name,c:m.color,i:m.cls.filter(c=>c.d.toLowerCase().includes(day.slice(0,3).toLowerCase())).map(c=>c.d).join(", ")})),...ot.map(o=>({e:o.e,n:o.n,c:o.c,i:o.i}))];
+          return <div key={day} style={{marginBottom:12,animation:`fadeSlideUp .3s ${di*.04}s both`}}>
+            <div style={{fontSize:13,fontWeight:700,color:"#a78bfa",textTransform:"uppercase",letterSpacing:1.5,marginBottom:5}}>{day}{day==="Wednesday"?" — Breather! 🌿":day==="Sunday"?" — Free Day! 🎮":""}</div>
+            {all.length===0?<div style={{fontSize:11,color:"#cbd5e1",padding:8}}>No classes — rest & recharge! 💤</div>:
+            all.map((c,i)=><div key={i} style={{...card,display:"flex",alignItems:"center",gap:10,textAlign:"left",padding:"10px 16px"}}><span style={{fontSize:24}}>{c.e}</span><div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:c.c}}>{c.n}</div><div style={{fontSize:10,color:"#a78bfa"}}>{c.i}</div></div></div>)}
+          </div>
+        })}
+      </div>}
+
+      {/* ═══ CALENDAR ═══ */}
+      {tab==="calendar"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#7c3aed",marginBottom:6}}>📅 What's Coming Up!</h2>
+        <div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:8}}>
+          {[["compact","Compact"],["full","Full View"]].map(([v,l])=><button key={v} onClick={()=>setCV(v)} style={pill(cv===v,"#e91e8c")}>{l}</button>)}
+        </div>
+        <div style={{display:"flex",gap:4,justifyContent:"center",marginBottom:8}}>
+          {[["o","📧 Mom's Outlook"],["g","📬 Zara's Gmail"]].map(([k,l])=><button key={k} onClick={()=>setCal(p=>({...p,[k]:!p[k]}))} style={{...pill(calOn[k],"#22c55e"),background:calOn[k]?"rgba(209,250,229,.7)":"transparent"}}>{calOn[k]?"✅":"🔗"} {l}</button>)}
+        </div>
+        <div style={{display:"flex",gap:6,marginBottom:12}}>{["March","April","May"].map(m=><div key={m} style={{flex:1,...card,padding:"8px 12px",textAlign:"center"}}><div style={{fontSize:12,fontWeight:700,color:"#7c3aed"}}>{m}</div><div style={{fontSize:9,color:"#a78bfa"}}>2026</div></div>)}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:cv==="compact"?6:10,textAlign:"left"}}>
+          {EVENTS.map((ev,i)=><div key={i} style={{...card,borderLeft:`5px solid ${ev.c}`,padding:cv==="compact"?"10px 14px":"16px 20px",background:ev.big?"rgba(255,255,255,.95)":"rgba(255,255,255,.8)",animation:`fadeSlideUp .3s ${i*.05}s both`}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <div><div style={{fontSize:cv==="compact"?13:16,fontWeight:700,color:ev.c}}>{ev.t}</div><div style={{fontSize:10,color:"#a78bfa",marginTop:2}}>{ev.dt}</div></div>
+              {ev.big&&<span style={{fontSize:20,animation:"stagePulse 2s infinite"}}>🌟</span>}
+            </div>
+            {ev.note&&cv==="full"&&<div style={{marginTop:6,background:"rgba(252,231,243,.5)",borderRadius:10,padding:"6px 10px",fontSize:10,color:"#7c3aed",fontWeight:600}}>{ev.note}</div>}
+            {ev.link&&<button onClick={()=>setTab(ev.link)} style={{marginTop:6,padding:"6px 14px",borderRadius:12,border:"2px solid #f59e0b",background:"rgba(254,243,199,.5)",color:"#92400e",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:ff}}>✈️ See our adventure plan!</button>}
+          </div>)}
+        </div>
+      </div>}
+
+      {/* ═══ CHORES ═══ */}
+      {tab==="chores"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#7c3aed",marginBottom:4}}>⭐ Today's Points</h2>
+        <p style={{color:"#a78bfa",fontSize:11,marginBottom:10}}>{dn}</p>
+        <div style={{...card,background:"linear-gradient(135deg,rgba(252,231,243,.6),rgba(237,233,254,.6))"}}>
+          <div style={{fontSize:38,fontWeight:700,color:"#7c3aed"}}>{cPts}<span style={{fontSize:16,color:"#a78bfa"}}> / {mxP}</span></div>
+          <div style={{maxWidth:280,margin:"8px auto",background:"rgba(255,255,255,.5)",borderRadius:12,height:16,overflow:"hidden",border:"2px solid rgba(233,215,255,.4)"}}>
+            <div style={{height:"100%",borderRadius:12,background:"linear-gradient(90deg,#e91e8c,#f59e0b,#22c55e)",width:`${(cPts/mxP)*100}%`,transition:"width .4s ease-out"}}/>
+          </div>
+          {cPts>=mxP&&<div style={{fontSize:14,fontWeight:700,color:"#e91e8c",marginTop:4}}>🎉 PERFECT DAY! All points earned!</div>}
+        </div>
+        <div style={{textAlign:"left"}}>
+          <h3 style={{fontSize:14,fontWeight:700,color:"#e91e8c",marginBottom:6}}>🏠 After-School Rush! ⏱️</h3>
+          {CH.af.map((c,i)=><div key={"a"+i} onClick={()=>togC("a"+i)} style={{...card,cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:chk["a"+i]?"rgba(209,250,229,.7)":"rgba(255,255,255,.8)",transition:"all .2s"}}>
+            <div style={{width:22,height:22,borderRadius:7,border:`2.5px solid ${chk["a"+i]?"#22c55e":"#d1d5db"}`,background:chk["a"+i]?"#22c55e":"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:"#fff",fontWeight:800,flexShrink:0,transition:"all .2s"}}>{chk["a"+i]?"✓":""}</div>
+            <span style={{fontSize:12,fontWeight:600,color:chk["a"+i]?"#059669":"#334155",textDecoration:chk["a"+i]?"line-through":"none",flex:1}}>{c.t}</span>
+            <span style={{fontSize:10,fontWeight:700,color:chk["a"+i]?"#22c55e":"#a78bfa",background:chk["a"+i]?"rgba(209,250,229,.5)":"rgba(237,233,254,.5)",padding:"2px 8px",borderRadius:8}}>+{c.p}</span>
+          </div>)}
+          <h3 style={{fontSize:14,fontWeight:700,color:"#8b5cf6",marginTop:14,marginBottom:6}}>🌟 Daily Habits</h3>
+          {CH.dy.map((c,i)=><div key={"d"+i} onClick={()=>togC("d"+i)} style={{...card,cursor:"pointer",display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:chk["d"+i]?"rgba(209,250,229,.7)":"rgba(255,255,255,.8)",transition:"all .2s"}}>
+            <div style={{width:22,height:22,borderRadius:7,border:`2.5px solid ${chk["d"+i]?"#22c55e":"#d1d5db"}`,background:chk["d"+i]?"#22c55e":"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:"#fff",fontWeight:800,flexShrink:0,transition:"all .2s"}}>{chk["d"+i]?"✓":""}</div>
+            <span style={{fontSize:12,fontWeight:600,color:chk["d"+i]?"#059669":"#334155",textDecoration:chk["d"+i]?"line-through":"none",flex:1}}>{c.t}</span>
+            <span style={{fontSize:10,fontWeight:700,color:chk["d"+i]?"#22c55e":"#a78bfa",background:chk["d"+i]?"rgba(209,250,229,.5)":"rgba(237,233,254,.5)",padding:"2px 8px",borderRadius:8}}>+{c.p}</span>
+          </div>)}
+        </div>
+        <div style={{...card,marginTop:14,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#7c3aed",marginBottom:6}}>🏆 Weekly Rewards</div>
+          {RW.map((r,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",fontSize:12,marginBottom:6,padding:"4px 0",borderBottom:i<RW.length-1?"1px solid rgba(233,215,255,.3)":"none",color:cPts*7>=r.p?"#059669":"#94a3b8"}}>
+            <span>{cPts*7>=r.p?"✅":"⬜"} {r.r}</span><span style={{fontWeight:700,fontSize:11}}>{r.p} pts</span>
+          </div>)}
+        </div>
+        <div style={{...card,marginTop:10,textAlign:"center",background:"linear-gradient(135deg,rgba(237,233,254,.5),rgba(219,234,254,.5))"}}>
+          <div style={{fontSize:12,fontWeight:700,color:"#7c3aed"}}>🌙 Bedtime: 8:30 PM</div>
+          <div style={{fontSize:10,color:"#a78bfa",marginTop:3}}>8:00 wind down → 8:10 PJs → 8:15 reading → 8:30 💤</div>
+        </div>
+      </div>}
+
+      {/* ═══ TRAVEL ═══ */}
+      {tab==="travel"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:24,fontWeight:700,color:"#f59e0b",marginBottom:2}}>✈️ Puerto Rico! 🇵🇷</h2>
+        <p style={{color:"#7c3aed",fontSize:13,fontWeight:600}}>April 4-12 · San Juan · Spring Break!</p>
+        <p style={{color:"#a78bfa",fontSize:10,marginBottom:12}}>No passport needed — it's part of the US! 🗽</p>
+        <div style={{display:"flex",gap:5,justifyContent:"center",marginBottom:12}}>
+          {PRI.map((d,i)=><button key={i} onClick={()=>setPD(i)} style={{width:44,height:44,borderRadius:14,...(pd===i?{border:"2px solid #f59e0b",background:"rgba(254,243,199,.7)",color:"#92400e"}:{border:"2px solid rgba(233,215,255,.4)",background:"rgba(255,255,255,.7)",color:"#a78bfa"}),fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:ff}}>Day<br/>{d.d}</button>)}
+        </div>
+        <div style={{...card,textAlign:"left"}}>
+          <div style={{fontSize:17,fontWeight:700,color:"#f59e0b",marginBottom:10}}>Day {PRI[pd].d}: {PRI[pd].t}</div>
+          {PRI[pd].i.map((item,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+            <div style={{width:24,height:24,borderRadius:"50%",background:"rgba(254,243,199,.7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#92400e",flexShrink:0,border:"2px solid rgba(251,191,36,.3)"}}>{i+1}</div>
+            <span style={{fontSize:13,color:"#334155"}}>{item}</span>
+          </div>)}
+        </div>
+        <div style={{...card,marginTop:8,background:"rgba(252,231,243,.4)"}}>
+          <div style={{fontSize:12,fontWeight:700,color:"#e91e8c"}}>🧳 Zara's Packing List</div>
+          <div style={{fontSize:11,color:"#7c3aed",marginTop:4}}>Swimsuit 👙 · Sunscreen 🧴 · Comfy shoes 👟 · Sketchbook 🎨 · Camera 📸 · Panda stuffy 🐼</div>
+        </div>
+      </div>}
+
+      {/* ═══ DISCOVER ═══ */}
+      {tab==="discover"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#7c3aed",marginBottom:6}}>🎥 Watch & Learn!</h2>
+        <p style={{color:"#a78bfa",fontSize:11,marginBottom:12}}>YouTube tutorials for every instrument!</p>
+        <div style={{display:"flex",gap:5,justifyContent:"center",flexWrap:"wrap",marginBottom:14}}>
+          {INST.filter(i=>YT[i.id]).map(i=><button key={i.id} onClick={()=>setSel(i.id)} style={pill(sel===i.id,i.color)}>{i.emoji}</button>)}
+        </div>
+        {YT[sel]&&YT[sel].map((v,i)=><a key={i} href={v.u} target="_blank" rel="noopener noreferrer" style={{display:"block",...card,padding:"12px 16px",textDecoration:"none",textAlign:"left",transition:"all .2s",animation:`fadeSlideUp .3s ${i*.06}s both`}} onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.borderColor="rgba(233,30,140,.4)"}} onMouseLeave={e=>{e.currentTarget.style.transform="none";e.currentTarget.style.borderColor="rgba(233,215,255,.5)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div style={{width:40,height:40,borderRadius:10,background:"linear-gradient(135deg,#ef4444,#f97316)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>▶</div>
+            <div><div style={{fontSize:13,fontWeight:700,color:"#7c3aed"}}>{v.t}</div><div style={{fontSize:10,color:"#a78bfa",marginTop:2}}>{v.d}</div></div>
+          </div>
+        </a>)}
+      </div>}
+
+      {/* ═══ SETLIST ═══ */}
+      {tab==="setlist"&&<div style={{textAlign:"center"}}>
+        <h2 style={{fontSize:22,fontWeight:700,color:"#7c3aed",marginBottom:12}}>🎶 My Concert Setlist 🎶</h2>
+        {sl.map((s,i)=><div key={i} style={{...card,display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 16px",animation:`fadeSlideUp .3s ${i*.06}s both`}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:28,height:28,borderRadius:8,background:"linear-gradient(135deg,#f59e0b,#fbbf24)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:700,color:"#fff"}}>{i+1}</div><span style={{fontSize:13,fontWeight:700,color:"#4c1d95"}}>{s}</span></div>
+          <button onClick={()=>setSL(p=>p.filter((_,j)=>j!==i))} style={{background:"rgba(254,226,226,.5)",border:"none",color:"#ef4444",cursor:"pointer",fontSize:14,width:28,height:28,borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+        </div>)}
+        <div style={{display:"flex",gap:6,marginTop:10}}>
+          <input value={ns} onChange={e=>setNS(e.target.value)} placeholder="Add a song 🎵" onKeyDown={e=>{if(e.key==="Enter"&&ns.trim()){setSL(p=>[...p,ns.trim()]);setNS("")}}} style={{flex:1,padding:"10px 14px",borderRadius:16,border:"2px solid rgba(233,215,255,.4)",background:"rgba(255,255,255,.8)",fontSize:12,fontFamily:ff,outline:"none",backdropFilter:"blur(4px)"}}/>
+          <button onClick={()=>{if(ns.trim()){setSL(p=>[...p,ns.trim()]);setNS("")}}} style={{padding:"10px 20px",borderRadius:16,border:"none",background:"linear-gradient(135deg,#e91e8c,#8b5cf6)",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:ff,boxShadow:"0 3px 12px rgba(139,92,246,.25)"}}>Add 🎵</button>
+        </div>
+      </div>}
+
+      </div>
+    </div>
+  </div>);
+}
